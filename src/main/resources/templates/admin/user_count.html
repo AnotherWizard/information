@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -13,7 +13,7 @@
 	</div>
 	<div class="spannels">
 		<div class="spannel scolor01">
-			<em>{{ data.total_count }}</em><span>人</span>
+			<em th:text="${data.totalCount}"> </em><span>人</span>
 			<b>用户总数</b>
 		</div>
 		<div class="spannel scolor02">
@@ -54,7 +54,7 @@
 					            saveAsImage : {show: true}
 					        }
 					    },
-				    	calculable : true,               
+				    	calculable : true,
 					    xAxis : [
 					        {
 		                        name: '今天',

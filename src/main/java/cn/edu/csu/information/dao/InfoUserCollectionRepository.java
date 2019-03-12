@@ -5,5 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface InfoUserCollectionRepository extends JpaRepository<InfoUserCollection,Integer> {
+    InfoUserCollection findByUserIdAndNewsId(Integer userId,Integer newsId);
+
+
 
 }

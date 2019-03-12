@@ -5,6 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/information?useSSL=false&characterEncoding=UTF-8
     type: com.alibaba.druid.pool.DruidDataSource
-
   mvc:
     static-path-pattern: /static/**
+  jpa:
+    show-sql: true
