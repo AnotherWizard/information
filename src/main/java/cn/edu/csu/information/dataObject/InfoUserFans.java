@@ -13,6 +13,7 @@ public class InfoUserFans implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+    @Id
     private Integer followerId;
 
     /**
@@ -22,7 +23,6 @@ public class InfoUserFans implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
-    @Id
     private Integer followedId;
 
     /**

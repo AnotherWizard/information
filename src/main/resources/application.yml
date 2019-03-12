@@ -7,6 +7,3 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   mvc:
     static-path-pattern: /static/**
-mybatis:
-  type-aliases-package: cn.edu.csu.information
-  mapper-locations: classpath:mapper/*.xml

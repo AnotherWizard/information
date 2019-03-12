@@ -42,6 +42,7 @@ public class InfoCommentLike implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+
     private Integer userId;
 
     /**

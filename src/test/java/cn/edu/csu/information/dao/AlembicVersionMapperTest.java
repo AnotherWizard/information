@@ -9,13 +9,13 @@ import javax.annotation.Resource;
 public class AlembicVersionMapperTest  extends InformationApplicationTests {
 
     @Resource
-    private AlembicVersionMapper mapper;
+    private AlembicVersionRepository mapper;
 
     @Test
     public void insert(){
-        AlembicVersion version = new AlembicVersion();
-        version.setVersionNum("123");
-        mapper.insert(version);
+//        AlembicVersion version = new AlembicVersion();
+//        version.setVersionNum("123");
+//        mapper.insert(version);
     }
 
 }
