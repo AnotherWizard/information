@@ -7,3 +7,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   mvc:
     static-path-pattern: /static/**
+
+  thymeleaf:
+    cache: false

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //@RequestMapping("/")
 public class BaseController {
 
-    @RequestMapping("/")
+    @RequestMapping("/base")
     public String index(){
         return "news/base";
     }
