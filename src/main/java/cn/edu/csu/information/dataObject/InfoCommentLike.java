@@ -1,8 +1,11 @@
 package cn.edu.csu.information.dataObject;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class InfoCommentLike implements Serializable {
     /**
      *
@@ -29,6 +32,7 @@ public class InfoCommentLike implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+    @Id
     private Integer commentId;
 
     /**
@@ -38,6 +42,7 @@ public class InfoCommentLike implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+
     private Integer userId;
 
     /**

@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 public class AlembicVersionMapperTest  extends InformationApplicationTests {
 
     @Resource
-    private AlembicVersionMapper mapper;
+    private AlembicVersionRepository mapper;
 
     @Test
     public void insert(){

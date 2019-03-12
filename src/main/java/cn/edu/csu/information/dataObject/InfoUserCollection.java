@@ -1,8 +1,11 @@
 package cn.edu.csu.information.dataObject;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class InfoUserCollection implements Serializable {
     /**
      *
@@ -11,6 +14,7 @@ public class InfoUserCollection implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+    @Id
     private Integer userId;
 
     /**
@@ -20,6 +24,7 @@ public class InfoUserCollection implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+
     private Integer newsId;
 
     /**
