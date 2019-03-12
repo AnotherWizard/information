@@ -1,7 +1,10 @@
 package cn.edu.csu.information.dataObject;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 
+@Entity
 public class InfoUserFans implements Serializable {
     /**
      *
@@ -19,6 +22,7 @@ public class InfoUserFans implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
+    @Id
     private Integer followedId;
 
     /**

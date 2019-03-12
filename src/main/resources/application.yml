@@ -1,9 +1,9 @@
 spring:
   datasource:
     username: root
-    password: sinian94804
+    password: sinian940804
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/information?useSSL=false&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost/information?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8
     type: com.alibaba.druid.pool.DruidDataSource
 mybatis:
   type-aliases-package: cn.edu.csu.information
