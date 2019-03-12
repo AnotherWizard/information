@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 public class InfoUserMapperTest extends InformationApplicationTests {
     @Resource
-    private InfoUserMapper infoUserMapper;
+    private InfoUserRepository infoUserMapper;
 
     @Test
     public void insertUser() {
