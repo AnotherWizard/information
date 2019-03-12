@@ -189,7 +189,6 @@ public class InfoNews implements Serializable {
      *
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
-    @Id
     public Integer getId() {
         return id;
     }

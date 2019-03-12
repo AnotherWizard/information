@@ -1,7 +1,7 @@
 package cn.edu.csu.information.dao;
 
 import cn.edu.csu.information.InformationApplicationTests;
-import cn.edu.csu.information.dataObject.AlembicVersion;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -9,13 +9,12 @@ import javax.annotation.Resource;
 public class AlembicVersionMapperTest  extends InformationApplicationTests {
 
     @Resource
-    private AlembicVersionRepository mapper;
+    private AlembicVersionRepository repository;
 
     @Test
-    public void insert(){
-        AlembicVersion version = new AlembicVersion();
-        version.setVersionNum("123");
-        mapper.insert(version);
+    public void findAll(){
+         Assert.assertNotNull(repository.findAll());
+
     }
 
 }
