@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: root
+    password: 271828
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/information?useSSL=false&characterEncoding=UTF-8
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis:
+  type-aliases-package: cn.edu.csu.information
+  mapper-locations: classpath:mapper/*.xml
