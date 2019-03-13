@@ -15,6 +15,11 @@ public interface UserService {
      */
     InfoUser findUserByMobile(String mobile);
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     List<InfoUser> findUserByType(Boolean type);
 
 

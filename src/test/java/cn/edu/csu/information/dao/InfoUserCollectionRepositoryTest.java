@@ -2,6 +2,7 @@ package cn.edu.csu.information.dao;
 
 import cn.edu.csu.information.InformationApplicationTests;
 import cn.edu.csu.information.dataObject.InfoUserCollection;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,11 @@ public class InfoUserCollectionRepositoryTest extends InformationApplicationTest
 
     @Test
     public void findAll() {
-        Assert.assertNotNull(repository.findById(1));
+        InfoUserCollectionMultiKey multiKey = new InfoUserCollectionMultiKey();
+        multiKey.setNewsId(1);
+        multiKey.setUserId(2);
+
+        Assert.assertNotNull( repository.getOne(multiKey));
     }
 
     @Test

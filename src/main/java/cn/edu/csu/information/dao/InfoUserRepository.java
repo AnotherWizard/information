@@ -20,4 +20,6 @@ public interface InfoUserRepository  extends JpaRepository<InfoUser,Integer> {
      * @return
      */
     List<InfoUser> findByIsAdmin(Boolean isAdmin);
+
+
 }

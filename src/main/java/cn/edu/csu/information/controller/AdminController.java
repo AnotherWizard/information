@@ -1,6 +1,7 @@
 package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.vo.UserCountVo;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -46,5 +48,12 @@ public class AdminController {
         countVo.setTotalCount(userService.findUserByType(AdminConstants.NOT_ADMIN).size());
         model.addAttribute("data",countVo);
         return "admin/user_count";
+    }
+
+    @RequestMapping("user_list")
+    public String userList(Model model){
+        List<InfoUser> users = userService.findUserByType(AdminConstants.NOT_ADMIN);
+        model.addAttribute("userList",users);
+        return "admin/user_list";
     }
 }

@@ -1,11 +1,15 @@
 package cn.edu.csu.information.dataObject;
 
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@IdClass(InfoUserCollectionMultiKey.class)
 public class InfoUserCollection implements Serializable {
     /**
      *
@@ -25,6 +29,7 @@ public class InfoUserCollection implements Serializable {
      * @mbg.generated Mon Mar 11 20:26:22 CST 2019
      */
 
+    @Id
     private Integer newsId;
 
     /**
