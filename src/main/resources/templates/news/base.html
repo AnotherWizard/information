@@ -1,34 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <link>
     <meta charset="UTF-8">
-    <title>{% block titleBlock %}{% endblock %}</title>
+    <title></title>
     <link rel="stylesheet" type="text/css" href="../../static/news/css/reset.css">
-    {% block cssBlock %}
-    
-    {% endblock %}
+
     <link rel="stylesheet" type="text/css" href="../../static/news/css/main.css">
     <script type="text/javascript" src="../../static/news/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="../../static/news/js/main.js"></script>
-    {% block scriptBlock %}
 
-    {% endblock %}
 </head>
 <body>
     <div class="header_con">
-        <div class="header">
+        <div class="header" >
             <a href="/" class="logo fl"><img src="../../static/news/images/logo.png" alt="logo"></a>
-            {% block categoryBlock %}
-                <ul class="menu fl">
-                    {% for category in data.category_li %}
-                        {% if loop.index == 1 %}
-                            <li data-cid="{{ category.id }}" class="active"><a href="javascript:;">{{ category.name }}</a></li>
-                        {% else %}
-                            <li data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>
-                        {% endif %}
-                    {% endfor %}
+                <ul class="menu fl" >
+                    <li th:each="category,categoryStat:${categories}" th:if = "${categoryStat.index} eq 0" th:data-cid="${category.id}" class="active"><a href="javascript:;" th:text="${category.name}"></a></li>
+                    <li th:each="category,categoryStat:${categories}" th:if = "${categoryStat.index} ne 0" th:data-cid="${category.id}"><a href="javascript:;" th:text="${category.name}"></a></li>
                 </ul>
-            {% endblock %}
+
             {% if data.user %}
                 <!-- 用户登录后显示下面，隐藏上面 -->
                 <div class="user_login fr">
@@ -47,15 +37,15 @@
     </div>
 
     <div class="conter_con">
-        {% block contentBlock %}
+        <!--{% block contentBlock %}
 
         {% endblock %}
 
-        {% block rankBlock %}
+        {% block rankBlock %}-->
             <div class="rank_con fr">
-                {% block authorBlock %}
+                <!--{% block authorBlock %}-->
 
-                {% endblock %}
+                <!--{% endblock %}-->
 
                 <div class="rank_title">
                     <h3>点击排行</h3>
@@ -66,11 +56,10 @@
                     {% endfor %}
                 </ul>
             </div>
-        {% endblock %}
+        <!--{% endblock %}-->
 
     </div>
 
-    {% block bottomBlock %}
         <div class="footer">
             <div class="footer_links">
                 <a href="">关于我们</a>
@@ -86,7 +75,6 @@
     电话：010-****888    京ICP备*******8号
             </p>
         </div>
-    {% endblock %}
 
     <!-- 登录表单 -->
     <form class="login_form_con">

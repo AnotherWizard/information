@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+
+<body>
+    {# for循环的使用，建议先写for,然后按住tab补全 #}
+    {% for elem in  data.news_dict_li %}
+    {# 数据大于3才让显示(使用if) #}
+        {{ elem }} <br>
+    {% endfor %}
+</body>
+
+</html>
