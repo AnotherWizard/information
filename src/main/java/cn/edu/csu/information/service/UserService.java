@@ -17,6 +17,7 @@ public interface UserService {
 
     /**
      *
+     *根据是否为管理员查找用户列表
      * @param type
      * @return
      */

@@ -8,6 +8,7 @@ import java.util.Date;
 public class UserCountVo {
     private Integer  totalCount;
     private Integer monCount;
+    private Integer dayCount;
     private Date activeTime;
     private String activeCount;
 }

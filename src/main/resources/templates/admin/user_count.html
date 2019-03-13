@@ -17,11 +17,11 @@
 			<b>用户总数</b>
 		</div>
 		<div class="spannel scolor02">
-			<em>{{ data.mon_count }}</em><span>人</span>
+			<em th:text="${data.monCount}"></em><span>人</span>
 			<b>用户月新增数</b>
 		</div>
 		<div class="spannel2 scolor03">
-			<em>{{ data.day_count }}</em><span>人</span>
+			<em th:text="${data.dayCount}"></em><span>人</span>
 			<b>用户日新增数</b>
 		</div>		
 	</div>
@@ -29,7 +29,7 @@
 	<div class="pannel">
 		<div id="chart_show" class="chart_show"></div>
 	</div>
-	<script>
+	<script th:inline="javascript">
 		var oChart = echarts.init(document.getElementById('chart_show'));
 		var chartopt = {
 					    title:{

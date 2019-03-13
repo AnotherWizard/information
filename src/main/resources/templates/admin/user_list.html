@@ -38,11 +38,17 @@
             <div id="pagination" class="page"></div>
         </div>
 
-        <script>
+        <script th:inline="javascript">
             $(function() {
+                /*<![CDATA[*/
+
+                var currentPage = /*[[${currentPage}]]*/ '1'
+                var totalPage = /*[[${totalPage}]]*/    '1'
+
+                /*]]>*/
                 $("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
+                    currentPage:currentPage,
+                    totalPage:totalPage,
                     callback: function(current) {
                         window.location.href = "/admin/user_list?page=" + current
                     }
