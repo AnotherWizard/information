@@ -51,9 +51,9 @@
                     <h3>点击排行</h3>
                 </div>
                 <ul class="rank_list">
-                    {% for news in data.news_dict_li %}
-                        <li><a href="/news/{{ news.id }}" ><span class="{{ loop.index0 | index_class }}">{{ loop.index }}</span>{{ news.title }}</a></li>
-                    {% endfor %}
+                    <!--{% for news in data.news_dict_li %}-->
+                        <li th:each="news,newsStat:${news_list}" th:if="${newsStat.index} lt ${top}"><span th:text="${newsStat.index}+1"></span><a th:href="@{'/news/'+${news.id}}" th:text="${news.title}"></a></li>
+                    <!--{% endfor %}-->
                 </ul>
             </div>
         <!--{% endblock %}-->
