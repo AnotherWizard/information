@@ -1,10 +1,13 @@
 package cn.edu.csu.information.dataObject;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
+@DynamicUpdate
 public class InfoUserFans implements Serializable {
 
     @Id
