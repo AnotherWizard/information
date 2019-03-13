@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -13,15 +13,15 @@
 	</div>
 	<div class="spannels">
 		<div class="spannel scolor01">
-			<em>{{ data.total_count }}</em><span>人</span>
+			<em th:text="${data.totalCount}"> </em><span>人</span>
 			<b>用户总数</b>
 		</div>
 		<div class="spannel scolor02">
-			<em>{{ data.mon_count }}</em><span>人</span>
+			<em th:text="${data.monCount}"></em><span>人</span>
 			<b>用户月新增数</b>
 		</div>
 		<div class="spannel2 scolor03">
-			<em>{{ data.day_count }}</em><span>人</span>
+			<em th:text="${data.dayCount}"></em><span>人</span>
 			<b>用户日新增数</b>
 		</div>		
 	</div>
@@ -29,7 +29,7 @@
 	<div class="pannel">
 		<div id="chart_show" class="chart_show"></div>
 	</div>
-	<script>
+	<script th:inline="javascript">
 		var oChart = echarts.init(document.getElementById('chart_show'));
 		var chartopt = {
 					    title:{
@@ -54,7 +54,7 @@
 					            saveAsImage : {show: true}
 					        }
 					    },
-				    	calculable : true,               
+				    	calculable : true,
 					    xAxis : [
 					        {
 		                        name: '今天',

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -15,9 +15,8 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 		<input type="text" name="username" placeholder="用户名" class="input_txt">
 		<input type="password" name="password" placeholder="密码" class="input_txt">
-        < if errmsg %}
-            <div class="error_tip" style="display: block">{{ errmsg }}</div>
-        {% endif %}
+
+            <div class="error_tip" th:text="${errmsg}" style="display: block"></div>
 
 		<input type="submit" value="登 录" class="input_sub">
 	</form>
