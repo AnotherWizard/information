@@ -22,6 +22,11 @@ public class IndexNewsListServiceImpl implements IndexNewsListService {
         return infoNewsRepository.findAll(sort);
     }
 
+    @Override
+    public Page<InfoNews> findAll(Pageable pageable) {
+        return infoNewsRepository.findAll(pageable);
+    }
+
 
 //    @Override
 //    public Page<InfoNews> findByOrderByClicks(Pageable pageable) {
