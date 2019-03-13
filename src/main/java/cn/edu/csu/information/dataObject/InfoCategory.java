@@ -1,6 +1,7 @@
 package cn.edu.csu.information.dataObject;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@DynamicUpdate
 public class InfoCategory implements Serializable {
 
     private Date createTime;

@@ -1,10 +1,15 @@
 package cn.edu.csu.information.dataObject;
 
+import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
+@DynamicUpdate
 @Entity
 public class InfoUser implements Serializable {
 

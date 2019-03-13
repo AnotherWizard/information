@@ -1,11 +1,14 @@
 package cn.edu.csu.information.dataObject;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@DynamicUpdate
 public class InfoCommentLike implements Serializable {
 
     private Date createTime;

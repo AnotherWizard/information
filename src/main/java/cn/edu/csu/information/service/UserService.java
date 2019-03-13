@@ -2,6 +2,7 @@ package cn.edu.csu.information.service;
 
 import cn.edu.csu.information.dataObject.InfoUser;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,5 +24,19 @@ public interface UserService {
      */
     List<InfoUser> findUserByType(Boolean type);
 
+    /**
+     * 查找最近注册的用户
+     * @param startTime
+     * @return
+     */
+    List<InfoUser> findUserRegisterNearTime(Date startTime);
+
+    /**
+     * 查找在指定时间内活跃的用户
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<InfoUser> findUserLoginBetweenTime(Date startTime,Date endTime);
 
 }

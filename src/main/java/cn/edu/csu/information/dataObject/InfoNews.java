@@ -1,5 +1,7 @@
 package cn.edu.csu.information.dataObject;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@DynamicUpdate
 @Data
 public class InfoNews implements Serializable {
 

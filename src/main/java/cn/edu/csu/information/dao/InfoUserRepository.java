@@ -2,15 +2,17 @@ package cn.edu.csu.information.dao;
 
 import cn.edu.csu.information.dataObject.InfoUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-
+import java.util.Date;
 import java.util.List;
 
+/**
+ * @author liuchengsheng
+ */
 public interface InfoUserRepository  extends JpaRepository<InfoUser,Integer> {
 
 
-    /*
+    /**
      * 根据手机号查询用户
      * @param Mobile
      * @return
@@ -24,6 +26,22 @@ public interface InfoUserRepository  extends JpaRepository<InfoUser,Integer> {
      */
     List<InfoUser> findByIsAdmin(Boolean isAdmin);
 
+    /**
+     * 根据起始时间和结束时间查询用户数量
+     * @param isAdmin
+     * @param start
+     * @param end
+     * @return
+     */
+    List<InfoUser> findByIsAdminAndLastLoginBetween(Boolean isAdmin,Date start,Date end);
+
+    /**
+     * 根据注册时间查询用户
+     * @param isAdmin
+     * @param startTime
+     * @return
+     */
+    List<InfoUser> findByIsAdminAndCreateTimeAfter(Boolean isAdmin,Date startTime);
 
 
 }
