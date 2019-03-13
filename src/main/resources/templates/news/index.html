@@ -1,0 +1,19 @@
+<!--{% extends 'news/base.html' %}-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<div th:replace="news/base :: html"></div>
+
+{% block titleBlock %}
+首页-
+新经资讯
+{% endblock %}
+
+{% block scriptBlock %}
+<script type="text/javascript" src="../../static/news/js/index.js"></script>
+{% endblock %}
+
+{% block contentBlock %}
+<ul class="list_con fl">
+</ul>
+{% endblock %}
