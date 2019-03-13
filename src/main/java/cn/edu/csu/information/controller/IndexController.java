@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,15 +28,15 @@ public class IndexController {
     @Resource
     private IndexNewsListService indexNewsListService;
 
-    @GetMapping("/news_list")
-    public String news_list(Model model){
-        Pageable newsOrderedPageable = PageRequest.of(0,6);
-        Page<InfoNews> newsOrderedPage = indexNewsListService.findAll(newsOrderedPageable);
-
-        System.out.println("总条数："+newsOrderedPage.getTotalElements());
-        System.out.println("总页数："+newsOrderedPage.getTotalPages());
-        return null;
-    }
+//    @GetMapping("/news_list")
+//    public String news_list(Model model){
+//        Pageable newsOrderedPageable = PageRequest.of(0,6);
+//        Page<InfoNews> newsOrderedPage = indexNewsListService.findAll(newsOrderedPageable);
+//
+//        System.out.println("总条数："+newsOrderedPage.getTotalElements());
+//        System.out.println("总页数："+newsOrderedPage.getTotalPages());
+//        return null;
+//    }
 
     @RequestMapping("/")
     public String index(Model model){
