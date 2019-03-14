@@ -41,4 +41,6 @@ public interface NewsService {
 
     List<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status);
 
+    InfoNews updateNews(InfoNews infoNews);
+
 }
