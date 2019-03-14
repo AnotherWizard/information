@@ -35,12 +35,26 @@ public class NewsServiceImpl implements NewsService {
         return infoNewsRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status, Pageable pageable) {
+        return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status, pageable);
+    }
 
+    @Override
+    public Page<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable) {
+        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status ,pageable);
+    }
 
-//    @Override
-//    public Page<InfoNews> findByOrderByClicks(Pageable pageable) {
-//        return infoNewsRepository.findByOrderByClicks(pageable);
-//    }
+    @Override
+    public List<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status) {
+        return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status);
+    }
+
+    @Override
+    public List<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status) {
+        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status);
+    }
+
 
     @Override
     public List<InfoNews> findNewsByStatus(Integer status) {

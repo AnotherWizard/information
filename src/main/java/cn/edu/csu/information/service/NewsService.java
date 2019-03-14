@@ -33,4 +33,12 @@ public interface NewsService {
 
     Page<InfoNews> findAll(Pageable pageable);
 
+    Page<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId,  Integer status, Pageable pageable);
+
+    Page<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable);
+
+    List<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId,  Integer status);
+
+    List<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status);
+
 }
