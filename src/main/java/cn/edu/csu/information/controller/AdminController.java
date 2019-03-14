@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -124,11 +125,11 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("/news_review_action")
-    public String newsReviewAction(@RequestParam Integer newsId) {
+    public String newsReviewAction(@RequestBody Map map) {
 
 
 
-       log.info(newsId.toString());
+       log.info(map.toString());
 
 
         return "admin/news_review_detail";
