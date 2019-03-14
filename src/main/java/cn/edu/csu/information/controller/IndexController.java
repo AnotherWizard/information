@@ -4,8 +4,10 @@ import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dto.NewsBasicDto;
+import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
+import cn.edu.csu.information.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
@@ -55,6 +57,8 @@ public class IndexController {
         for(InfoNews news : newsOrderedList){
             NewsBasicDto newsBasicDto = new NewsBasicDto();
             BeanUtils.copyProperties(news, newsBasicDto);
+            newsBasicDto.setCreateTimeStr(
+                    DateUtil.formatDate2(newsBasicDto.getCreateTime()));
             System.out.println(newsBasicDto);
             newsDictLi.add(newsBasicDto);
         }
@@ -68,8 +72,8 @@ public class IndexController {
         Map<String, Object> jsonBag = new HashMap<String, Object>();
 
         jsonBag.put("data", data);
-        jsonBag.put("errno", 0);
-        jsonBag.put("errmsg" ,"OK");
+        jsonBag.put("errno", ResultEnum.OK.getCode());
+        jsonBag.put("errmsg" , ResultEnum.OK.getMsg());
 
 //        System.out.println("总条数："+newsOrderedPage.getTotalElements());
 //        System.out.println("总页数："+newsOrderedPage.getTotalPages());

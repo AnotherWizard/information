@@ -10,6 +10,8 @@ import java.util.Date;
 public class NewsBasicDto {
     private Date createTime;
 
+    private String createTimeStr = "";
+
 //    @JsonProperty
     private Integer id;
 
