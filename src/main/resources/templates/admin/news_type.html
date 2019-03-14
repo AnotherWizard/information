@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -19,13 +19,12 @@
 					<th width="80%">类别名称</th>
 					<th width="10%">管理操作</th>
 				</tr>
-				{% for category in data.categories %}
-                    <tr>
-                        <td>{{ category.id }}</td>
-                        <td>{{ category.name }}</td>
+
+                    <tr th:each="category:${categorys}" >
+                        <td th:text="${category.id}"></td>
+                        <td th:text="${category.name}"></td>
                         <td><a href="javascript:;" class="edit">编辑</a></td>
                     </tr>
-                {% endfor %}
 				<tr>
 					<td colspan="3"><a href="javascript:;" class="addtype">增加分类</a></td>
 				</tr>

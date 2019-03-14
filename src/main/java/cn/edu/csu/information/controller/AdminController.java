@@ -1,6 +1,7 @@
 package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dto.NewsDetailDto;
@@ -158,6 +159,7 @@ public class AdminController {
             news.setReason((String) map.get("reason"));
         }
 
+        news.setUpdateTime(new Date());
         newsService.updateNews(news);
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
@@ -191,4 +193,55 @@ public class AdminController {
         return "admin/news_edit_detail";
     }
 
+    @PostMapping("/news_edit_detail")
+    @ResponseBody
+    public Map newsEditDetail(@RequestParam(value = "newsId") Integer newsId) {
+
+        Map<String, Object> result = new HashMap<>();
+        return result;
+    }
+
+    @GetMapping("/news_type")
+    public String newType(Model model) {
+
+        model.addAttribute("categorys", categoryService.getCategoryExcludeNew());
+        return "admin/news_type";
+    }
+
+    @PostMapping("/news_type")
+    @ResponseBody
+    public Map newType(@RequestBody Map map) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        if (!map.containsKey("name")) {
+
+            result.put("errmsg", ResultEnum.OK.getMsg());
+            return result;
+        }
+
+        String categoryName = (String) map.get("name");
+
+        InfoCategory category;
+        if (map.containsKey("id")) {
+
+            Integer id = Integer.valueOf((String) map.get("id"));
+            category = categoryService.findCategoryById(id);
+            if (!categoryName.equals(category.getName())) {
+                category.setName(categoryName);
+                category.setUpdateTime(new Date());
+            }
+
+        } else {
+
+            category = new InfoCategory(categoryName);
+
+        }
+
+        categoryService.save(category);
+
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+        return result;
+    }
 }

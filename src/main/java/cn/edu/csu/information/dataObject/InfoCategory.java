@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +20,7 @@ public class InfoCategory implements Serializable {
     private Date updateTime = new Date();
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -54,5 +57,14 @@ public class InfoCategory implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public InfoCategory(String name) {
+        this.createTime = new Date();
+        this.name = name;
+
+    }
+
+    public InfoCategory() {
     }
 }
