@@ -10,6 +10,9 @@ import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,26 +43,27 @@ public class IndexController {
                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                                          @RequestParam(value = "per_page", defaultValue = "10") Integer per_page)
     {
-//        Page<InfoNews> newsOrderedPage = null;
-//        Pageable newsOrderedPageable = PageRequest.of(page,per_page);
-        List<InfoNews> newsOrderedList = null;
+        Page<InfoNews> newsOrderedPage = null;
+        Pageable newsOrderedPageable = PageRequest.of(page,per_page);
+//        List<InfoNews> newsOrderedList = null;
         if(cid == 1) {
-//            newsOrderedPage = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
-            newsOrderedList = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS);
+            newsOrderedPage = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
+//            newsOrderedList = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS);
         }else{
-//            newsOrderedPage = newsService.findByStatusOrderByCreateTimeDesc(cid,CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
-            newsOrderedList = newsService.findByCategoryIdAndStatusOrderByCreateTimeDesc(cid, CommonConstants.NEWEST_STATUS_NEWS);
+            newsOrderedPage = newsService.findByCategoryIdAndStatusOrderByCreateTimeDesc(cid,CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
+//            newsOrderedList = newsService.findByCategoryIdAndStatusOrderByCreateTimeDesc(cid, CommonConstants.NEWEST_STATUS_NEWS);
         }
 
-        int totalPage = newsOrderedList.size();
+//        int totalPage = newsOrderedList.size();
+        int totalPage = newsOrderedPage.getTotalPages();
         int currentPage = page;
         List<NewsBasicDto> newsDictLi = new LinkedList<>();
-        for(InfoNews news : newsOrderedList){
+//        for(InfoNews news : newsOrderedList){
+        for(InfoNews news : newsOrderedPage){
             NewsBasicDto newsBasicDto = new NewsBasicDto();
             BeanUtils.copyProperties(news, newsBasicDto);
             newsBasicDto.setCreateTimeStr(
                     DateUtil.formatDate2(newsBasicDto.getCreateTime()));
-            System.out.println(newsBasicDto);
             newsDictLi.add(newsBasicDto);
         }
 
@@ -89,10 +93,7 @@ public class IndexController {
         model.addAttribute("categories",infoCategories);
         model.addAttribute("news_list",newsOrderedList);
         model.addAttribute("top",CommonConstants.CLICK_RANK_MAX_NEWS);
-//        model.addAttribute("",)
-//        for(InfoCategory attribute : infoCategories) {
-//            System.out.println(attribute);
-//        }
+
         return "news/index";
     }
 }

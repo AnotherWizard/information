@@ -1,5 +1,5 @@
 var currentCid = 1; // 当前分类 id
-var cur_page = 1; // 当前页
+var cur_page = 0; // 当前页
 var total_page = 1;  // 总页数
 var data_querying = true;   // 是否正在向后台获取数据
 
@@ -24,7 +24,7 @@ $(function () {
             currentCid = clickCid
 
             // 重置分页参数
-            cur_page = 1
+            cur_page = 0
             total_page = 1
             updateNewsData()
         }
@@ -77,7 +77,7 @@ function updateNewsData() {
             total_page = resp.data.total_page
             // 代表请求成功
             // 清除已有数据
-            if (cur_page == 1) {
+            if (cur_page == 0) {
                 $(".list_con").html("")
             }
 
