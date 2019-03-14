@@ -3,6 +3,7 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
+import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dto.NewsBasicDto;
 import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.service.CategoryService;
@@ -39,7 +40,7 @@ public class IndexController {
 
     @GetMapping("/news_list")
     @ResponseBody
-    public Map<String, Object> news_list(@RequestParam(value = "cid", defaultValue = "1") Integer cid,
+    public Map<String, Object> newsList(@RequestParam(value = "cid", defaultValue = "1") Integer cid,
                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                                          @RequestParam(value = "per_page", defaultValue = "10") Integer per_page)
     {
@@ -47,10 +48,10 @@ public class IndexController {
         Pageable newsOrderedPageable = PageRequest.of(page,per_page);
 //        List<InfoNews> newsOrderedList = null;
         if(cid == 1) {
-            newsOrderedPage = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
+            newsOrderedPage = newsService.findNewsByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
 //            newsOrderedList = newsService.findByStatusOrderByCreateTimeDesc(CommonConstants.NEWEST_STATUS_NEWS);
         }else{
-            newsOrderedPage = newsService.findByCategoryIdAndStatusOrderByCreateTimeDesc(cid,CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
+            newsOrderedPage = newsService.findNewsByCategoryIdAndStatusOrderByCreateTimeDesc(cid,CommonConstants.NEWEST_STATUS_NEWS, newsOrderedPageable);
 //            newsOrderedList = newsService.findByCategoryIdAndStatusOrderByCreateTimeDesc(cid, CommonConstants.NEWEST_STATUS_NEWS);
         }
 
@@ -86,14 +87,22 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model){
-        List<InfoCategory> infoCategories = categoryService.findAll();
-        Sort sort = new Sort(Sort.Direction.DESC, "clicks");
-        List<InfoNews> newsOrderedList = newsService.findAll(sort);
 
-        model.addAttribute("categories",infoCategories);
-        model.addAttribute("news_list",newsOrderedList);
-        model.addAttribute("top",CommonConstants.CLICK_RANK_MAX_NEWS);
+//        InfoUser user = new InfoUser();
+        rankList(model, categoryService, newsService);
+//        model.addAttribute("user",user);
 
         return "news/index";
     }
+
+    static void rankList(Model model, CategoryService categoryService, NewsService newsService) {
+        List<InfoCategory> infoCategories = categoryService.findAll();
+        Sort sort = new Sort(Sort.Direction.DESC, "clicks");
+        List<InfoNews> newsOrderedList = newsService.findNewsAll(sort);
+
+        model.addAttribute("categories",infoCategories);
+        model.addAttribute("news_list",newsOrderedList);
+        model.addAttribute("top", CommonConstants.CLICK_RANK_MAX_NEWS);
+    }
+
 }

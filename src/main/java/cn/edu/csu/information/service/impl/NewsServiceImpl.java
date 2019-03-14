@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -25,33 +26,33 @@ public class NewsServiceImpl implements NewsService {
     private InfoCategoryRepository categoryRepository;
 
     @Override
-    public List<InfoNews> findAll(Sort sort) {
+    public List<InfoNews> findNewsAll(Sort sort) {
         return infoNewsRepository.findAll(sort);
     }
 
 
    @Override
-    public Page<InfoNews> findAll(Pageable pageable) {
-        return infoNewsRepository.findAll(pageable);
+    public Page<InfoNews> findNewsAllByOrderByCreateTimeDesc(Pageable pageable) {
+        return infoNewsRepository.findAllByOrderByCreateTimeDesc(pageable);
     }
 
     @Override
-    public Page<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status, Pageable pageable) {
+    public Page<InfoNews> findNewsByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status, Pageable pageable) {
         return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status, pageable);
     }
 
     @Override
-    public Page<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable) {
+    public Page<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable) {
         return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status ,pageable);
     }
 
     @Override
-    public List<InfoNews> findByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status) {
+    public List<InfoNews> findNewsByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status) {
         return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status);
     }
 
     @Override
-    public List<InfoNews> findByStatusOrderByCreateTimeDesc(Integer status) {
+    public List<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status) {
         return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status);
     }
 
@@ -81,5 +82,10 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public InfoNews updateNews(InfoNews infoNews) {
         return infoNewsRepository.save(infoNews);
+    }
+
+    @Override
+    public Optional<InfoNews> findById(Integer integer) {
+        return infoNewsRepository.findById(integer);
     }
 }
