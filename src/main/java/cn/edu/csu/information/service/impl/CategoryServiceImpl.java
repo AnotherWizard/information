@@ -1,5 +1,6 @@
 package cn.edu.csu.information.service.impl;
 
+import cn.edu.csu.information.constants.AdminConstants;
 import cn.edu.csu.information.dao.InfoCategoryRepository;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.service.CategoryService;
@@ -17,5 +18,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<InfoCategory> findAll() {
         return infoCategoryRepository.findAll();
+    }
+
+    @Override
+    public List<InfoCategory> getCategoryExcludeNew() {
+        return infoCategoryRepository.findByIdNot(AdminConstants.CATEGORY_OF_NEW);
     }
 }

@@ -15,7 +15,7 @@ public class InfoCategory implements Serializable {
 
     private Date createTime;
 
-    private Date updateTime;
+    private Date updateTime = new Date();
 
     @Id
     private Integer id;

@@ -8,7 +8,8 @@ public interface AdminConstants {
     Integer NEWS_REVIEW_NOT_PASS = -1;
     String REVIEW_ACCEPT = "accept";
     String REVIEW_REJECT = "reject";
+    Integer DEFAULT_PAGE_SIZE = 10;
 
-
+    Integer CATEGORY_OF_NEW = 1;
 
 }
