@@ -24,4 +24,14 @@ public class CategoryServiceImpl implements CategoryService {
     public List<InfoCategory> getCategoryExcludeNew() {
         return infoCategoryRepository.findByIdNot(AdminConstants.CATEGORY_OF_NEW);
     }
+
+    @Override
+    public InfoCategory save(InfoCategory infoCategory) {
+        return infoCategoryRepository.save(infoCategory);
+    }
+
+    @Override
+    public InfoCategory findCategoryById(Integer integer) {
+        return infoCategoryRepository.getOne(integer);
+    }
 }
