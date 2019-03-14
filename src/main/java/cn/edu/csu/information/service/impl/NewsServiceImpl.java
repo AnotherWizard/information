@@ -6,7 +6,7 @@ import cn.edu.csu.information.dao.InfoNewsRepository;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dto.NewsDetailDto;
-import cn.edu.csu.information.service.IndexNewsListService;
+import cn.edu.csu.information.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IndexNewsListServiceImpl implements IndexNewsListService {
+public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private InfoNewsRepository infoNewsRepository;

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-public interface IndexNewsListService {
+public interface NewsService {
 //    Page<InfoNews> findByOrderByClicks(Pageable pageable);
     List<InfoNews> findAll(Sort sort);
 

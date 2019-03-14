@@ -3,7 +3,7 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.AdminConstants;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
-import cn.edu.csu.information.service.IndexNewsListService;
+import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
 import cn.edu.csu.information.vo.UserCountVo;
@@ -26,7 +26,7 @@ public class AdminController {
     private UserService userService;
 
     @Resource
-    private IndexNewsListService newsListService;
+    private NewsService newsListService;
 
     @GetMapping("/login")
     public String login() {
