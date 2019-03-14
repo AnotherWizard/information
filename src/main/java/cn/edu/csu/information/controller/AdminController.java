@@ -3,12 +3,16 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.AdminConstants;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dto.NewsDetailDto;
 import cn.edu.csu.information.enums.ResultEnum;
+import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
 import cn.edu.csu.information.vo.UserCountVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * @author liuchengsheng
+ */
 @Slf4j
 @Controller
 @RequestMapping("/admin")
@@ -26,6 +33,9 @@ public class AdminController {
 
     @Resource
     private NewsService newsService;
+
+    @Resource
+    private CategoryService categoryService;
 
     @GetMapping("/login")
     public String login() {
@@ -44,7 +54,7 @@ public class AdminController {
     @RequestMapping("/index")
     public String index(Model model) {
 
-        model.addAttribute("user", userService.findUserByMobile("17347313219"));
+        model.addAttribute("user", userService.findUserByMobile("15289353925"));
         return "admin/index";
     }
 
@@ -139,21 +149,46 @@ public class AdminController {
         if (AdminConstants.REVIEW_ACCEPT.equals(action)) {
             news.setStatus(AdminConstants.NEWS_REVIEW_PASS);
 
-        }else if (!map.containsKey("reason")){
-            result.put("errmsg",ResultEnum.REASONERR.getMsg());
+        } else if (!map.containsKey("reason")) {
+            result.put("errmsg", ResultEnum.REASONERR.getMsg());
             return result;
 
-        }else {
+        } else {
             news.setStatus(AdminConstants.NEWS_REVIEW_NOT_PASS);
             news.setReason((String) map.get("reason"));
         }
 
         newsService.updateNews(news);
-        result.put("errno",ResultEnum.OK.getCode());
+        result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
 
-
         return result;
+    }
+
+    @RequestMapping("/news_edit")
+    public String newsEdit(@RequestParam(value = "p", defaultValue = "1") Integer currentPage,
+                           @RequestParam(value = "keywords", required = false) String keywords,
+                           Model model) {
+
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, AdminConstants.DEFAULT_PAGE_SIZE);
+
+        Page<InfoNews> infoNewsPage = newsService.findAll(pageRequest);
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", infoNewsPage.getTotalPages());
+        model.addAttribute(infoNewsPage.getContent());
+        return "admin/news_edit";
+    }
+
+    @GetMapping("/news_edit_detail")
+    public String newsEditDetail(@RequestParam(value = "newsId") Integer newsId,
+                                 Model model) {
+
+        NewsDetailDto detailDto = newsService.findNewsById(newsId);
+        model.addAttribute(detailDto.getInfoNews());
+
+        model.addAttribute("categorys", categoryService.getCategoryExcludeNew());
+        return "admin/news_edit_detail";
     }
 
 }

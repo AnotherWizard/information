@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -28,17 +28,17 @@
                 <th width="15%">发布时间</th>
                 <th width="10%">管理操作</th>
                 </tr>
-                {% for news in data.news_list %}
-                    <tr>
-                        <td>{{ news.id }}</td>
-                        <td class="tleft"><a href="/news/{{ news.id }}" target="_blank">{{ news.title }}</a></td>
-                        <td>{{ news.clicks }}</td>
-                        <td>{{ news.create_time }}</td>
+
+                    <tr th:each="news:${infoNewsList}">
+                        <td th:text="${news.id}"></td>
+                        <td class="tleft"><a th:href="@{/news/{id}(id=${news.id})}" target="_blank" th:text="${news.title}"></a></td>
+                        <td th:text="${news.clicks}"></td>
+                        <td th:text="${news.createTime}"></td>
                         <td>
-                            <a href="{{ url_for("admin.news_edit_detail") }}?news_id={{ news.id }}" class="edit">编辑</a>
+                            <a th:href="@{/admin/news_edit_detail/(newsId=${news.id})}"  class="edit">编辑</a>
                         </td>
                     </tr>
-                {% endfor %}
+
 			</table>
 		</div>
 		
@@ -49,8 +49,8 @@
         <script>
 			$(function() {
 				$("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
+                    currentPage: [[${currentPage}]],
+                    totalPage:[[${totalPages}]],
                     callback: function(current) {
                         window.location = '/admin/news_edit?p=' + current
                     }
