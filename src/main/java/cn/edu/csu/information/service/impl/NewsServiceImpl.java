@@ -49,7 +49,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<InfoNews> findNewsNotPub() {
-        return infoNewsRepository.findByStatusNot(AdminConstants.NEWS_REVIEWED);
+        return infoNewsRepository.findByStatusNot(AdminConstants.NEWS_REVIEW_PASS);
     }
 
     @Override
@@ -62,5 +62,10 @@ public class NewsServiceImpl implements NewsService {
         newsDetailDto.setInfoCategory(category);
 
         return newsDetailDto;
+    }
+
+    @Override
+    public InfoNews updateNews(InfoNews infoNews) {
+        return infoNewsRepository.save(infoNews);
     }
 }

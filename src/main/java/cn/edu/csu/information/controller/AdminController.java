@@ -3,6 +3,7 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.AdminConstants;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
@@ -13,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -27,7 +25,7 @@ public class AdminController {
     private UserService userService;
 
     @Resource
-    private NewsService newsListService;
+    private NewsService newsService;
 
     @GetMapping("/login")
     public String login() {
@@ -106,7 +104,7 @@ public class AdminController {
                              @RequestParam(value = "keywords", required = false) String keywords,
                              Model model) {
 
-        List<InfoNews> newsList = newsListService.findNewsNotPub();
+        List<InfoNews> newsList = newsService.findNewsNotPub();
         model.addAttribute(currentPage);
         model.addAttribute("totalPage", 1);
         model.addAttribute(newsList);
@@ -117,22 +115,45 @@ public class AdminController {
     public String newsReviewDetail(@PathVariable Integer newsId,
                                    Model model) {
 
-
-
-        model.addAttribute("data",newsListService.findNewsById(newsId));
+        model.addAttribute("data", newsService.findNewsById(newsId));
         return "admin/news_review_detail";
     }
 
     @ResponseBody
     @PostMapping("/news_review_action")
-    public String newsReviewAction(@RequestBody Map map) {
+    public Map newsReviewAction(@RequestBody Map<String, Object> map) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        if (!map.containsKey("newsId") | !map.containsKey("action")) {
+
+            result.put("errmsg", ResultEnum.OK.getMsg());
+            return result;
+        }
+
+        Integer newsId = Integer.valueOf((String) map.get("newsId"));
+        String action = (String) map.get("action");
+
+        InfoNews news = newsService.findNewsById(newsId).getInfoNews();
+
+        if (AdminConstants.REVIEW_ACCEPT.equals(action)) {
+            news.setStatus(AdminConstants.NEWS_REVIEW_PASS);
+
+        }else if (!map.containsKey("reason")){
+            result.put("errmsg",ResultEnum.REASONERR.getMsg());
+            return result;
+
+        }else {
+            news.setStatus(AdminConstants.NEWS_REVIEW_NOT_PASS);
+            news.setReason((String) map.get("reason"));
+        }
+
+        newsService.updateNews(news);
+        result.put("errno",ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
 
 
-
-       log.info(map.toString());
-
-
-        return "admin/news_review_detail";
+        return result;
     }
 
 }

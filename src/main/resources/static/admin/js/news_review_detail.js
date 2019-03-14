@@ -15,7 +15,7 @@ $(function(){
         });
         // 取到参数以便判断
         var action = params["action"];
-        var news_id = params["news_id"];
+        var newsId = params["newsId"];
         var reason = params["reason"];
         if (action == "reject" && !reason) {
             alert('请输入拒绝原因');
@@ -23,7 +23,7 @@ $(function(){
         }
         params = {
             "action": action,
-            "news_id": news_id,
+            "newsId": newsId,
             "reason": reason
         }
         $.ajax({

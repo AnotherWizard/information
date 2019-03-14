@@ -33,4 +33,11 @@ public interface NewsService {
 
     Page<InfoNews> findAll(Pageable pageable);
 
+    /**
+     * 更新新闻
+     * @param infoNews
+     * @return
+     */
+    InfoNews updateNews(InfoNews infoNews);
+
 }
