@@ -8,6 +8,8 @@ import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dto.NewsDetailDto;
 import cn.edu.csu.information.service.IndexNewsListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,14 @@ public class IndexNewsListServiceImpl implements IndexNewsListService {
     public List<InfoNews> findAll(Sort sort) {
         return infoNewsRepository.findAll(sort);
     }
+
+
+   @Override
+    public Page<InfoNews> findAll(Pageable pageable) {
+        return infoNewsRepository.findAll(pageable);
+    }
+
+
 
 //    @Override
 //    public Page<InfoNews> findByOrderByClicks(Pageable pageable) {

@@ -26,4 +26,8 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
 
     @Override
     List<InfoNews> findAll(Sort sort);
+
+    @Query("select news from InfoNews news ORDER BY news.createTime DESC")
+    Page<InfoNews> findAll(Pageable pageable);
+
 }

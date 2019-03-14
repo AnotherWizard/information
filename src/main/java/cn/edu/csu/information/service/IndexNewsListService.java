@@ -2,6 +2,8 @@ package cn.edu.csu.information.service;
 
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dto.NewsDetailDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -28,4 +30,7 @@ public interface IndexNewsListService {
      * @return
      */
     NewsDetailDto findNewsById(Integer id);
+
+    Page<InfoNews> findAll(Pageable pageable);
+
 }
