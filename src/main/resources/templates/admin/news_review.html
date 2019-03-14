@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>新经资讯后台管理</title>
@@ -26,23 +26,17 @@
 					<th width="5%">状态</th>
 					<th width="8%">管理操作</th>
 				</tr>
-                {% for news in data.news_list %}
-                    <tr>
-                        <td>{{ news.id }}</td>
-                        <td class="tleft">{{ news.title }}</td>
-                        <td>{{ news.create_time }}</td>
-                        <td>{% if news.status == 0 %}
-                            已通过
-                            {% elif news.status == -1 %}
-                            未通过
-                            {% else %}
-                            未审核
-                        {% endif %}</td>
+
+                    <tr th:each="news:${infoNewsList}">
+                        <td th:text="${news.id}"></td>
+						<td th:text="${news.title}"></td>
+						<td th:text="${news.createTime}"></td>
+                        <td th:switch="${news.status}" th:case="1" th:text="未审核"></td>
+						<td th:switch="${news.status}" th:case="-1" th:text="未通过"></td>
                         <td>
-                            <a href="{{ url_for("admin.news_review_detail", news_id=news.id) }}" class="review">审核</a>
+                            <a th:href="@{/admin/news_review_detail/{id}(id=${news.id})}" class="review">审核</a>
                         </td>
                     </tr>
-                {% endfor %}
 			</table>
 		</div>
 
@@ -53,8 +47,8 @@
         <script>
 			$(function() {
 				$("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
+                    currentPage: /*[[${currentPage}]]*/ '1',
+                    totalPage: /*[[${totalPage}]]*/    '1',
                     callback: function(current) {
                         window.location = '/admin/news_review?p=' + current
                     }
