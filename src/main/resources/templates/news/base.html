@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <link>
     <meta charset="UTF-8">
-    <title th:include="news/index :: title"></title>
+    <title>首页- 新经资讯</title>
     <link rel="stylesheet" type="text/css" href="../../static/news/css/reset.css">
 
     <link rel="stylesheet" type="text/css" href="../../static/news/css/main.css">
@@ -37,7 +37,10 @@
     </div>
 
     <div class="conter_con">
-        <div th:replace="news/index :: list_con"></div>
+
+        <ul th:fragment="list_con" class="list_con fl">
+        </ul>
+        <!--<div th:replace="news/index :: list_con"></div>-->
         <!--{% block contentBlock %}-->
 
         <!--{% endblock %}-->
