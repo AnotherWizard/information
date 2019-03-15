@@ -209,7 +209,7 @@ public class AdminController {
 
         if (image != null) {
             InputStream inputStream = image.getInputStream();
-            String imageUrl = imageStorage.storage(inputStream);
+            String imageUrl = String.format("%s%s",AdminConstants.QINIU_DOMIN_PREFIX,imageStorage.storage(inputStream));
             news.setIndexImageUrl(imageUrl);
         }
 

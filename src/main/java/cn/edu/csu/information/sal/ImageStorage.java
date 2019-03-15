@@ -34,8 +34,6 @@ public class ImageStorage {
 
         UploadManager uploadManager = new UploadManager(cfg);
 
-
-
         Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);
 

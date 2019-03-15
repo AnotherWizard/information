@@ -12,4 +12,10 @@ public interface AdminConstants {
 
     Integer CATEGORY_OF_NEW = 1;
 
+    String QINIU_DOMIN_PREFIX = "http://";
+
+    String IMAGE_CODE_ID_PREFIX="ImageCodeId_";
+
+    Integer IMAGE_CODE_REDIS_EXPIRES = 300;
+
 }
