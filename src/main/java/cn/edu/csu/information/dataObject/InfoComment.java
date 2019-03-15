@@ -1,5 +1,6 @@
 package cn.edu.csu.information.dataObject;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @DynamicUpdate
+@Data
 public class InfoComment implements Serializable {
 
     private Date createTime;

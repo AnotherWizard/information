@@ -175,7 +175,7 @@ public class AdminController {
 
         PageRequest pageRequest = PageRequest.of(currentPage - 1, AdminConstants.DEFAULT_PAGE_SIZE);
 
-        Page<InfoNews> infoNewsPage = newsService.findAll(pageRequest);
+        Page<InfoNews> infoNewsPage = newsService.findNewsAllByOrderByCreateTimeDesc(pageRequest);
 
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", infoNewsPage.getTotalPages());
