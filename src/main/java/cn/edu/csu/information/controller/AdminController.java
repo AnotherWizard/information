@@ -6,6 +6,7 @@ import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dto.NewsDetailDto;
 import cn.edu.csu.information.enums.ResultEnum;
+import cn.edu.csu.information.sal.ImageStorage;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -38,6 +41,9 @@ public class AdminController {
 
     @Resource
     private CategoryService categoryService;
+
+    @Resource
+    private ImageStorage imageStorage;
 
     @GetMapping("/login")
     public String login() {
@@ -197,12 +203,25 @@ public class AdminController {
     @PostMapping("/news_edit_detail")
     @ResponseBody
     public Map newsEditDetail(InfoNews infoNews,
-                              @RequestParam(value = "index_image") MultipartFile image) {
+                              @RequestParam(value = "index_image", required = false) MultipartFile image) throws IOException {
 
-        log.info(image.isEmpty()+"");
-        log.info(infoNews.toString());
+        InfoNews news = newsService.findNewsById(infoNews.getId()).getInfoNews();
+
+        if (image != null) {
+            InputStream inputStream = image.getInputStream();
+            String imageUrl = String.format("%s%s",AdminConstants.QINIU_DOMIN_PREFIX,imageStorage.storage(inputStream));
+            news.setIndexImageUrl(imageUrl);
+        }
+
+        news.setCategoryId(infoNews.getCategoryId());
+        news.setTitle(infoNews.getTitle());
+        news.setDigest(infoNews.getDigest());
+        news.setContent(infoNews.getContent());
+        newsService.updateNews(news);
 
         Map<String, Object> result = new HashMap<>();
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
 
