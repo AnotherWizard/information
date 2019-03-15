@@ -4,11 +4,14 @@ import cn.edu.csu.information.dataObject.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liu
  */
 public interface UserService {
+
+    Optional<InfoUser> findUserById(Integer integer);
     /**
      * 根据手机号查找用户
      * @param mobile
@@ -42,6 +45,8 @@ public interface UserService {
     List<InfoUserCollection> findUserCollectionByUserId(Integer userId);
 
     List<InfoUserFans> findUserFansByFollowerId(Integer followerId);
+
+    List<InfoUserFans> findUserFansByFollowedId(Integer followedId);
 
 
 }

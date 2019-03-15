@@ -30,7 +30,6 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-//@RequestMapping("/")
 public class IndexController {
 
     @Resource

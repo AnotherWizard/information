@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liu
@@ -28,6 +29,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private InfoUserFansRepository infoUserFansRepository;
 
+
+    @Override
+    public Optional<InfoUser> findUserById(Integer integer) {
+        return infoUserRepository.findById(integer);
+    }
 
     @Override
     public InfoUser findUserByMobile(String mobile) {
@@ -58,6 +64,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<InfoUserFans> findUserFansByFollowerId(Integer followerId) {
         return infoUserFansRepository.findByFollowerId(followerId);
+    }
+
+    @Override
+    public List<InfoUserFans> findUserFansByFollowedId(Integer followedId) {
+        return infoUserFansRepository.findByFollowedId(followedId);
     }
 
 }

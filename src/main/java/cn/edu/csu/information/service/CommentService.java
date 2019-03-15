@@ -9,4 +9,6 @@ public interface CommentService {
     List<InfoComment> findCommentByNewsIdOrderByCreateTimeDesc(Integer newsId);
 
     List<InfoCommentLike> findCommentLikeByCommentIdInAndUserId(List<Integer> commentIds, Integer userID);
+
+    List<InfoComment> findCommentByNewsId(Integer newsId);
 }
