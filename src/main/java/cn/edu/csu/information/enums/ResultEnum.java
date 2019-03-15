@@ -21,8 +21,16 @@ public enum ResultEnum {
     /**
      * 参数错误
      */
-    REASONERR(202,"请输入拒绝原因")
+    REASONERR(202,"请输入拒绝原因"),
 
+    /**
+     * 手机号码格式错误
+     */
+    MOBILEERR(203,"手机号码格式错误"),
+    TIMEOUTERR(204,"验证码以过期"),
+    CODEERR(205,"验证码错误"),
+    NO_USER(206,"用户不存在"),
+    PWDERR(207,"用户名或密码错误"),
     ;
     private Integer code;
     private String msg;

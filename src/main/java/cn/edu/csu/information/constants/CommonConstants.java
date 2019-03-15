@@ -14,5 +14,9 @@ public interface CommonConstants {
 
     Boolean IS_FOLLOWED = true;
 
-    Boolean NOT_FOLLOWED =false;
+    Boolean NOT_FOLLOWED = false;
+
+    String COOKIE_TOKEN = "token";
+    String TOKEN_PREFIX = "token_";
+    Integer TOKEN_EXPIRE = 7200;
 }

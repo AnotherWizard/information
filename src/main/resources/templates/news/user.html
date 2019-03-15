@@ -1,42 +1,92 @@
-{% extends 'news/base.html' %}
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新经资讯后台管理</title>
+    <!--<link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">-->
+    <script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
 
-{% block titleBlock %}
-用户中心
-{% endblock %}
+    <link rel="stylesheet" type="text/css" href="../../static/news/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/news/css/main.css">
+    <script type="text/javascript" src="../../static/news/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../../static/news/js/main.js"></script>
+</head>
+<body>
 
-{% block authorBlock %}
-{% endblock %}
+<!--<div class="user_login fr">-->
+    <!--&lt;!&ndash;<img src="{% if data.user.avatar_url %} {{ data.user.avatar_url }} {% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">&ndash;&gt;-->
+    <!--<img src="../../static/admin/images/person.png" alt="张大山">-->
+    <!--<a href="/user/info" id="nick_name"><em th:text="${user.nickName}"></em></a>-->
+    <!--<a href="javascript:;" onclick="logout()">退出</a>-->
+<!--</div>-->
 
-{% block rankBlock %}
 
-{% endblock %}
 
-{% block contentBlock %}
+<div class="header_con">
+    <div class="header">
+        <a href="/" class="logo fl"><img src="../../static/news/images/logo.png" alt="logo"></a>
+        <!--<ul class="menu fl">-->
+            <!--{% for category in data.category_li %}-->
+            <!--{% if loop.index == 1 %}-->
+            <!--<li data-cid="{{ category.id }}" class="active"><a href="javascript:;">{{ category.name }}</a></li>-->
+            <!--{% else %}-->
+            <!--<li data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>-->
+            <!--{% endif %}-->
+            <!--{% endfor %}-->
+        <!--</ul>-->
+        <!--{% endblock %}-->
+        <!--{% if data.user %}-->
+        <!-- 用户登录后显示下面，隐藏上面 -->
+        <div class="user_login fr">
+            <img src="../../static/admin/images/person.png" alt="张大山" class="lgin_pic">
+            <a href="/user/info" id="nick_name"><em th:text="${user.nickName}"></em></a>
+            <a href="javascript:;" onclick="logout()">退出</a>
+        </div>
+        <!--{% else %}-->
+        <!--<div class="user_btns fr">-->
+            <!--<a href="javascript:;" class="login_btn">登录</a> / <a href="javascript:;" class="register_btn">注册</a>-->
+        <!--</div>-->
+        <!--{% endif %}-->
+    </div>
+</div>
+
+
+
 <div class="user_menu_con fl">
     <div class="user_center_pic">
-        <img src={% if data.user.avatar_url %}
-            {{ data.user.avatar_url }}
-        {% else %}
-            "../../static/news/images/user_pic.png"
-        {% endif %} alt="用户图片">
+        <img src="../../static/admin/images/person.png" alt="张大山">
     </div>
-    <div class="user_center_name">{{ data.user.nick_name }}</div>
+
+
+    <div class="user_center_name"><em th:text="${user.nickName}"> 刘总 </em></div>
 
     <ul class="option_list">
-        <li class="active"><a href="{{ url_for("profile.base_info") }}" target="main_frame">基本资料</a></li>
-        <li><a href="{{ url_for("profile.pic_info") }}" target="main_frame">头像设置</a></li>
-        <li><a href="{{ url_for("profile.user_follow") }}" target="main_frame">我的关注</a></li>
-        <li><a href="{{ url_for("profile.pass_info") }}" target="main_frame">密码修改</a></li>
-        <li><a href="{{ url_for("profile.user_collection") }}" target="main_frame">我的收藏</a></li>
-        <li><a href="{{ url_for("profile.news_release") }}" target="main_frame">新闻发布</a></li>
-        <li><a href="{{ url_for("profile.user_news_list") }}" target="main_frame">新闻列表</a></li>
+        <li class="active"><a href="" target="main_frame">基本资料</a></li>
+        <li><a href="" target="main_frame">头像设置</a></li>
+        <li><a href="" target="main_frame">我的关注</a></li>
+        <li><a href="" target="main_frame">密码修改</a></li>
+        <li><a href="" target="main_frame">我的收藏</a></li>
+        <li><a href="" target="main_frame">新闻发布</a></li>
+        <li><a href="" target="main_frame">新闻列表</a></li>
     </ul>
 </div>
 
-<div class="user_con fr">
-    <iframe src="{{ url_for("profile.base_info") }}" frameborder="0" name="main_frame" class="main_frame" id="main_frame"></iframe>
+<div class="footer">
+    <div class="footer_links">
+        <a href="">关于我们</a>
+        <span>|</span>
+        <a href="">联系我们</a>
+        <span>|</span>
+        <a href="">招聘人才</a>
+        <span>|</span>
+        <a href="">友情链接</a>
+    </div>
+    <p class="copyright">
+        CopyRight © 2018 新经资讯信息技术有限公司 All Rights Reserved<br />
+        电话：010-****888    京ICP备*******8号
+    </p>
 </div>
-{% endblock %}
 
-{% block categoryBlock %}
-{% endblock %}
+</body>
+</html>

@@ -14,8 +14,10 @@ public interface AdminConstants {
 
     String QINIU_DOMIN_PREFIX = "http://";
 
-    String IMAGE_CODE_ID_PREFIX="ImageCodeId_";
+    String IMAGE_CODE_ID_PREFIX = "ImageCodeId_";
 
+    String SMS_CODE_PREFIX = "SMS_";
     Integer IMAGE_CODE_REDIS_EXPIRES = 300;
+    Integer SMS_CODE_REDIS_EXPIRES = 300;
 
 }
