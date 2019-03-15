@@ -87,8 +87,10 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model){
+        /*** 此处获取用户登录信息 ***/
+//        InfoUser user = null;
+//        infoUser = session.get(user)
 
-//        InfoUser user = new InfoUser();
         rankList(model, categoryService, newsService);
 //        model.addAttribute("user",user);
 

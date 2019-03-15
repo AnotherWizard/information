@@ -1,9 +1,6 @@
 package cn.edu.csu.information.service;
 
-import cn.edu.csu.information.dataObject.InfoComment;
-import cn.edu.csu.information.dataObject.InfoCommentLike;
-import cn.edu.csu.information.dataObject.InfoUser;
-import cn.edu.csu.information.dataObject.InfoUserCollection;
+import cn.edu.csu.information.dataObject.*;
 
 import java.util.Date;
 import java.util.List;
@@ -43,6 +40,8 @@ public interface UserService {
     List<InfoUser> findUserLoginBetweenTime(Date startTime,Date endTime);
 
     List<InfoUserCollection> findUserCollectionByUserId(Integer userId);
+
+    List<InfoUserFans> findUserFansByFollowerId(Integer followerId);
 
 
 }

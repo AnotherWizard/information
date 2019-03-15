@@ -7,4 +7,12 @@ public interface CommonConstants {
     Integer NEWEST_STATUS_NEWS = 0;
 
     Integer DEFAULT_PAGE_SIZE = 10;
+
+    Boolean IS_COLLECTED = true;
+
+    Boolean NOT_COLLECTED = false;
+
+    Boolean IS_FOLLOWED = true;
+
+    Boolean NOT_FOLLOWED =false;
 }

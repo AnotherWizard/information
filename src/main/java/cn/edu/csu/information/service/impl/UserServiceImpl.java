@@ -3,11 +3,9 @@ package cn.edu.csu.information.service.impl;
 import cn.edu.csu.information.constants.AdminConstants;
 import cn.edu.csu.information.dao.InfoCommentRepository;
 import cn.edu.csu.information.dao.InfoUserCollectionRepository;
+import cn.edu.csu.information.dao.InfoUserFansRepository;
 import cn.edu.csu.information.dao.InfoUserRepository;
-import cn.edu.csu.information.dataObject.InfoComment;
-import cn.edu.csu.information.dataObject.InfoCommentLike;
-import cn.edu.csu.information.dataObject.InfoUser;
-import cn.edu.csu.information.dataObject.InfoUserCollection;
+import cn.edu.csu.information.dataObject.*;
 import cn.edu.csu.information.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private InfoUserCollectionRepository infoUserCollectionRepository;
+
+    @Autowired
+    private InfoUserFansRepository infoUserFansRepository;
 
 
     @Override
@@ -52,6 +53,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<InfoUserCollection> findUserCollectionByUserId(Integer userId) {
         return infoUserCollectionRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<InfoUserFans> findUserFansByFollowerId(Integer followerId) {
+        return infoUserFansRepository.findByFollowerId(followerId);
     }
 
 }

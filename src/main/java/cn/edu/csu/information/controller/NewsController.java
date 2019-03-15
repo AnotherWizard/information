@@ -2,10 +2,14 @@ package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
+import cn.edu.csu.information.dto.CommentBeLikedDto;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.CommentService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
+import cn.edu.csu.information.utils.DateUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static cn.edu.csu.information.controller.IndexController.rankList;
 
@@ -36,30 +43,109 @@ public class NewsController {
     @ResponseBody
     public String newsDetail(Model model, @PathVariable("newsId") Integer newsId){
         InfoUser infoUser = null;
+        /*** 此处获取用户登录信息 ***/
 //        infoUser = session.get(user)
+
         rankList(model, categoryService, newsService);
         InfoNews infoNews = newsService.findNewsById(newsId).getInfoNews();
         infoNews.setClicks(infoNews.getClicks()+1);
 
-        Boolean isCollected = false;
-        if(infoUser != null){
-            List<InfoUserCollection> infoUserCollections = userService.findUserCollectionByUserId(infoUser.getId());
-            for(InfoUserCollection infoUserCollection : infoUserCollections){
-                if(infoUserCollection.getNewsId() == newsId){
-                    isCollected = true;
-                    break;
-                }
-            }
-        }
-
         List<InfoComment> infoComments = commentService.findCommentByNewsIdOrderByCreateTimeDesc(newsId);
 
+        Boolean isCollected = false;
+        List<Integer> infoCommentLikeIds = new LinkedList<>();
+        if(infoUser != null){
+            isCollected = ifCollected(infoUser, newsId);
 
+            List<Integer> infoCommentIds = getCommentIds(infoComments);
+            List<InfoCommentLike> infoCommentLikes = commentService.findCommentLikeByCommentIdInAndUserId(infoCommentIds, infoUser.getId());
+            infoCommentLikeIds = getCommentLikeIds(infoCommentLikes);
+        }
+
+        List<CommentBeLikedDto> commentDicLi = getCommentDictLi(infoComments, infoCommentLikeIds);
+
+        Boolean isFollowed = false;
+        if(infoNews.getUserId() != null && infoUser != null){
+            isFollowed = ifFollowed(infoNews, infoUser);
+        }
+
+
+        if(infoUser != null){
+            /*** 此处要对infoUser做数据处理转化为dto(还没做) ***/
+            model.addAttribute("user",infoUser);
+        }else{
+            model.addAttribute("user", null);
+        }
+        model.addAttribute("news", infoNews);
+
+//        data = {
+//                "user": user.to_dict() if user else None,
+//                "news_dict_li": news_dict_li,
+//                "news": news.to_dict(),
+//                "is_collected": is_collected,
+//                "is_followed": is_followed,
+//                "comments": comment_dict_li
+//        }
 
 
 
 //        System.out.println(infoNews);
         return "I am news " + newsId;
+    }
+
+    private Boolean ifCollected(InfoUser infoUser, Integer newsId){
+        List<InfoUserCollection> infoUserCollections = userService.findUserCollectionByUserId(infoUser.getId());
+        for(InfoUserCollection infoUserCollection : infoUserCollections){
+            if(infoUserCollection.getNewsId().equals(newsId)){
+                return CommonConstants.IS_COLLECTED;
+            }
+        }
+        return  CommonConstants.NOT_COLLECTED;
+    }
+
+    private Boolean ifFollowed(InfoNews infoNews, InfoUser infoUser){
+        List<InfoUserFans> infoUserFansList = userService.findUserFansByFollowerId(infoUser.getId());
+        for(InfoUserFans infoUserFans : infoUserFansList){
+            if (infoUserFans.getFollowedId().equals(infoNews.getUserId())){
+                return CommonConstants.IS_FOLLOWED;
+            }
+        }
+        return CommonConstants.NOT_FOLLOWED;
+    }
+
+    private List<Integer> getCommentIds(List<InfoComment> infoComments){
+        List<Integer> commentIds = new LinkedList<>();
+        for(InfoComment infoComment : infoComments){
+            commentIds.add(infoComment.getId());
+        }
+        return commentIds;
+    }
+
+    private List<Integer> getCommentLikeIds(List<InfoCommentLike> infoCommentLikes){
+        List<Integer> commentLikeIds = new LinkedList<>();
+        for(InfoCommentLike infoCommentLike : infoCommentLikes){
+            commentLikeIds.add(infoCommentLike.getCommentId());
+        }
+        return commentLikeIds;
+    }
+
+    private List<CommentBeLikedDto> getCommentDictLi(List<InfoComment> infoComments, List<Integer> infoCommentLikeIds){
+        List<CommentBeLikedDto> commentDictLi = new LinkedList<>();
+        for(InfoComment infoComment : infoComments){
+            CommentBeLikedDto commentBeLikedDto = new CommentBeLikedDto();
+            BeanUtils.copyProperties(infoComment, commentBeLikedDto);
+            commentBeLikedDto.setCreateTimeStr(
+                    DateUtil.formatDate2(commentBeLikedDto.getCreateTime()));
+            commentBeLikedDto.setLiked(false);
+
+            for(Integer commentLikeIds : infoCommentLikeIds){
+                if(infoComment.getId().equals(commentLikeIds)){
+                    commentBeLikedDto.setLiked(true);
+                }
+            }
+            commentDictLi.add(commentBeLikedDto);
+        }
+        return  commentDictLi;
     }
 
 
