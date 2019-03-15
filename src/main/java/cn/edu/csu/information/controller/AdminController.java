@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -195,7 +196,11 @@ public class AdminController {
 
     @PostMapping("/news_edit_detail")
     @ResponseBody
-    public Map newsEditDetail(@RequestParam(value = "newsId") Integer newsId) {
+    public Map newsEditDetail(InfoNews infoNews,
+                              @RequestParam(value = "index_image") MultipartFile image) {
+
+        log.info(image.isEmpty()+"");
+        log.info(infoNews.toString());
 
         Map<String, Object> result = new HashMap<>();
         return result;
