@@ -1,19 +1,22 @@
 package cn.edu.csu.information.dataObject;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @DynamicUpdate
+@Data
 public class InfoComment implements Serializable {
 
     private Date createTime;
 
-    private Date updateTime;
+    private Date updateTime = new Date();
 
     @Id
     private Integer id;

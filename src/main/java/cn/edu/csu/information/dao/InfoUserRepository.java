@@ -5,12 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liuchengsheng
  */
 public interface InfoUserRepository  extends JpaRepository<InfoUser,Integer> {
 
+
+    @Override
+    Optional<InfoUser> findById(Integer integer);
 
     /**
      * 根据手机号查询用户

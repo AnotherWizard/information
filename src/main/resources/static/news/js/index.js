@@ -1,5 +1,5 @@
 var currentCid = 1; // 当前分类 id
-var cur_page = 1; // 当前页
+var cur_page = 0; // 当前页
 var total_page = 1;  // 总页数
 var data_querying = true;   // 是否正在向后台获取数据
 
@@ -24,7 +24,7 @@ $(function () {
             currentCid = clickCid
 
             // 重置分页参数
-            cur_page = 1
+            cur_page = 0
             total_page = 1
             updateNewsData()
         }
@@ -77,7 +77,7 @@ function updateNewsData() {
             total_page = resp.data.total_page
             // 代表请求成功
             // 清除已有数据
-            if (cur_page == 1) {
+            if (cur_page == 0) {
                 $(".list_con").html("")
             }
 
@@ -87,12 +87,12 @@ function updateNewsData() {
             for (var i=0;i<resp.data.news_dict_li.length;i++) {
                 var news = resp.data.news_dict_li[i]
                 var content = '<li>'
-                content += '<a href="/news/' + news.id + '" class="news_pic fl"><img src="' + news.index_image_url + '?imageView2/1/w/170/h/170"></a>'
+                content += '<a href="/news/' + news.id + '" class="news_pic fl"><img src="' + news.indexImageUrl + '?imageView2/1/w/170/h/170"></a>'
                 content += '<a href="/news/' + news.id + '" class="news_title fl">' + news.title + '</a>'
                 content += '<a href="/news/' + news.id + '" class="news_detail fl">' + news.digest + '</a>'
                 content += '<div class="author_info fl">'
                 content += '<div class="source fl">来源：' + news.source + '</div>'
-                content += '<div class="time fl">' + news.create_time + '</div>'
+                content += '<div class="time fl">' + news.createTimeStr + '</div>'
                 content += '</div>'
                 content += '</li>'
                 $(".list_con").append(content)

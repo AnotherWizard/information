@@ -1,22 +1,33 @@
 package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dto.NewsDetailDto;
+import cn.edu.csu.information.enums.ResultEnum;
+import cn.edu.csu.information.sal.ImageStorage;
+import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
 import cn.edu.csu.information.vo.UserCountVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
+/**
+ * @author liuchengsheng
+ */
 @Slf4j
 @Controller
 @RequestMapping("/admin")
@@ -26,7 +37,13 @@ public class AdminController {
     private UserService userService;
 
     @Resource
-    private NewsService newsListService;
+    private NewsService newsService;
+
+    @Resource
+    private CategoryService categoryService;
+
+    @Resource
+    private ImageStorage imageStorage;
 
     @GetMapping("/login")
     public String login() {
@@ -45,7 +62,7 @@ public class AdminController {
     @RequestMapping("/index")
     public String index(Model model) {
 
-        model.addAttribute("user", userService.findUserByMobile("17347313219"));
+        model.addAttribute("user", userService.findUserByMobile("15289353925"));
         return "admin/index";
     }
 
@@ -105,7 +122,7 @@ public class AdminController {
                              @RequestParam(value = "keywords", required = false) String keywords,
                              Model model) {
 
-        List<InfoNews> newsList = newsListService.findNewsNotPub();
+        List<InfoNews> newsList = newsService.findNewsNotPub();
         model.addAttribute(currentPage);
         model.addAttribute("totalPage", 1);
         model.addAttribute(newsList);
@@ -116,22 +133,139 @@ public class AdminController {
     public String newsReviewDetail(@PathVariable Integer newsId,
                                    Model model) {
 
-
-
-        model.addAttribute("data",newsListService.findNewsById(newsId));
+        model.addAttribute("data", newsService.findNewsById(newsId));
         return "admin/news_review_detail";
     }
 
     @ResponseBody
     @PostMapping("/news_review_action")
-    public String newsReviewAction(@RequestParam Integer newsId) {
+    public Map newsReviewAction(@RequestBody Map<String, Object> map) {
 
+        Map<String, Object> result = new HashMap<>();
 
+        if (!map.containsKey("newsId") | !map.containsKey("action")) {
 
-       log.info(newsId.toString());
+            result.put("errmsg", ResultEnum.OK.getMsg());
+            return result;
+        }
 
+        Integer newsId = Integer.valueOf((String) map.get("newsId"));
+        String action = (String) map.get("action");
 
-        return "admin/news_review_detail";
+        InfoNews news = newsService.findNewsById(newsId).getInfoNews();
+
+        if (AdminConstants.REVIEW_ACCEPT.equals(action)) {
+            news.setStatus(AdminConstants.NEWS_REVIEW_PASS);
+
+        } else if (!map.containsKey("reason")) {
+            result.put("errmsg", ResultEnum.REASONERR.getMsg());
+            return result;
+
+        } else {
+            news.setStatus(AdminConstants.NEWS_REVIEW_NOT_PASS);
+            news.setReason((String) map.get("reason"));
+        }
+
+        news.setUpdateTime(new Date());
+        newsService.updateNews(news);
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+
+        return result;
     }
 
+    @RequestMapping("/news_edit")
+    public String newsEdit(@RequestParam(value = "p", defaultValue = "1") Integer currentPage,
+                           @RequestParam(value = "keywords", required = false) String keywords,
+                           Model model) {
+
+        PageRequest pageRequest = PageRequest.of(currentPage - 1, AdminConstants.DEFAULT_PAGE_SIZE);
+
+        Page<InfoNews> infoNewsPage = newsService.findNewsAllByOrderByCreateTimeDesc(pageRequest);
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", infoNewsPage.getTotalPages());
+        model.addAttribute(infoNewsPage.getContent());
+        return "admin/news_edit";
+    }
+
+    @GetMapping("/news_edit_detail")
+    public String newsEditDetail(@RequestParam(value = "newsId") Integer newsId,
+                                 Model model) {
+
+        NewsDetailDto detailDto = newsService.findNewsById(newsId);
+        model.addAttribute(detailDto.getInfoNews());
+
+        model.addAttribute("categorys", categoryService.getCategoryExcludeNew());
+        return "admin/news_edit_detail";
+    }
+
+    @PostMapping("/news_edit_detail")
+    @ResponseBody
+    public Map newsEditDetail(InfoNews infoNews,
+                              @RequestParam(value = "index_image", required = false) MultipartFile image) throws IOException {
+
+        InfoNews news = newsService.findNewsById(infoNews.getId()).getInfoNews();
+
+        if (image != null) {
+            InputStream inputStream = image.getInputStream();
+            String imageUrl = String.format("%s%s",AdminConstants.QINIU_DOMIN_PREFIX,imageStorage.storage(inputStream));
+            news.setIndexImageUrl(imageUrl);
+        }
+
+        news.setCategoryId(infoNews.getCategoryId());
+        news.setTitle(infoNews.getTitle());
+        news.setDigest(infoNews.getDigest());
+        news.setContent(infoNews.getContent());
+        newsService.updateNews(news);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+        return result;
+    }
+
+    @GetMapping("/news_type")
+    public String newType(Model model) {
+
+        model.addAttribute("categorys", categoryService.getCategoryExcludeNew());
+        return "admin/news_type";
+    }
+
+    @PostMapping("/news_type")
+    @ResponseBody
+    public Map newType(@RequestBody Map map) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        if (!map.containsKey("name")) {
+
+            result.put("errmsg", ResultEnum.OK.getMsg());
+            return result;
+        }
+
+        String categoryName = (String) map.get("name");
+
+        InfoCategory category;
+        if (map.containsKey("id")) {
+
+            Integer id = Integer.valueOf((String) map.get("id"));
+            category = categoryService.findCategoryById(id);
+            if (!categoryName.equals(category.getName())) {
+                category.setName(categoryName);
+                category.setUpdateTime(new Date());
+            }
+
+        } else {
+
+            category = new InfoCategory(categoryName);
+
+        }
+
+        categoryService.save(category);
+
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+        return result;
+    }
 }

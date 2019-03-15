@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -25,22 +26,36 @@ public class NewsServiceImpl implements NewsService {
     private InfoCategoryRepository categoryRepository;
 
     @Override
-    public List<InfoNews> findAll(Sort sort) {
+    public List<InfoNews> findNewsAll(Sort sort) {
         return infoNewsRepository.findAll(sort);
     }
 
 
    @Override
-    public Page<InfoNews> findAll(Pageable pageable) {
-        return infoNewsRepository.findAll(pageable);
+    public Page<InfoNews> findNewsAllByOrderByCreateTimeDesc(Pageable pageable) {
+        return infoNewsRepository.findAllByOrderByCreateTimeDesc(pageable);
     }
 
+    @Override
+    public Page<InfoNews> findNewsByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status, Pageable pageable) {
+        return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status, pageable);
+    }
 
+    @Override
+    public Page<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable) {
+        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status ,pageable);
+    }
 
-//    @Override
-//    public Page<InfoNews> findByOrderByClicks(Pageable pageable) {
-//        return infoNewsRepository.findByOrderByClicks(pageable);
-//    }
+    @Override
+    public List<InfoNews> findNewsByCategoryIdAndStatusOrderByCreateTimeDesc(Integer categoryId, Integer status) {
+        return infoNewsRepository.findByCategoryIdAndStatusOrderByCreateTimeDesc(categoryId, status);
+    }
+
+    @Override
+    public List<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status) {
+        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status);
+    }
+
 
     @Override
     public List<InfoNews> findNewsByStatus(Integer status) {
@@ -49,7 +64,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<InfoNews> findNewsNotPub() {
-        return infoNewsRepository.findByStatusNot(AdminConstants.NEWS_REVIEWED);
+        return infoNewsRepository.findByStatusNot(AdminConstants.NEWS_REVIEW_PASS);
     }
 
     @Override
@@ -62,5 +77,20 @@ public class NewsServiceImpl implements NewsService {
         newsDetailDto.setInfoCategory(category);
 
         return newsDetailDto;
+    }
+
+    @Override
+    public InfoNews updateNews(InfoNews infoNews) {
+        return infoNewsRepository.save(infoNews);
+    }
+
+    @Override
+    public Optional<InfoNews> findById(Integer integer) {
+        return infoNewsRepository.findById(integer);
+    }
+
+    @Override
+    public List<InfoNews> findNewsByUserId(Integer userId) {
+        return infoNewsRepository.findByUserId(userId);
     }
 }

@@ -47,4 +47,9 @@ public class DateUtil {
         return sdf.format(date);
     }
 
+    public static  String formatDate2(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(date);
+    }
+
 }
