@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +20,7 @@ public class InfoUser implements Serializable {
     private Date updateTime = new Date();
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nickName;
@@ -30,11 +33,11 @@ public class InfoUser implements Serializable {
 
     private Date lastLogin;
 
-    private Boolean isAdmin;
+    private Boolean isAdmin = Boolean.FALSE;
 
     private String signature;
 
-    private String gender;
+    private String gender="MAN";
 
     private static final long serialVersionUID = 1L;
 

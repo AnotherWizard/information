@@ -1,11 +1,12 @@
 package cn.edu.csu.information.service.impl;
 
 import cn.edu.csu.information.constants.AdminConstants;
-import cn.edu.csu.information.dao.InfoCommentRepository;
 import cn.edu.csu.information.dao.InfoUserCollectionRepository;
 import cn.edu.csu.information.dao.InfoUserFansRepository;
 import cn.edu.csu.information.dao.InfoUserRepository;
-import cn.edu.csu.information.dataObject.*;
+import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dataObject.InfoUserCollection;
+import cn.edu.csu.information.dataObject.InfoUserFans;
 import cn.edu.csu.information.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,4 +72,8 @@ public class UserServiceImpl implements UserService {
         return infoUserFansRepository.findByFollowedId(followedId);
     }
 
+    @Override
+    public InfoUser updatOrAddUser(InfoUser infoUser) {
+        return infoUserRepository.save(infoUser);
+    }
 }

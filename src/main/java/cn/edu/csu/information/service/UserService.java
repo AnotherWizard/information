@@ -48,5 +48,12 @@ public interface UserService {
 
     List<InfoUserFans> findUserFansByFollowedId(Integer followedId);
 
+    /**
+     * 用户注册
+     * @param infoUser
+     * @return
+     */
+    InfoUser updatOrAddUser(InfoUser infoUser);
+
 
 }
