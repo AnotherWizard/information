@@ -2,7 +2,7 @@ package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
-import cn.edu.csu.information.dto.CommentBeLikedDto;
+import cn.edu.csu.information.dto.CommentDetailDto;
 import cn.edu.csu.information.dto.NewsShowDto;
 import cn.edu.csu.information.dto.UserShowDto;
 import cn.edu.csu.information.service.CategoryService;
@@ -10,21 +10,14 @@ import cn.edu.csu.information.service.CommentService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static cn.edu.csu.information.controller.IndexController.rankList;
 
@@ -41,7 +34,7 @@ public class NewsController {
     @Resource
     private CommentService commentService;
 
-    @GetMapping(value = "/{newsId}")
+    @RequestMapping(value = "/{newsId}")
     public String newsDetail(Model model, @PathVariable("newsId") Integer newsId){
         InfoUser infoUser = null;
         /*** 此处获取用户登录信息 ***/
@@ -63,7 +56,7 @@ public class NewsController {
             infoCommentLikeIds = getCommentLikeIds(infoCommentLikes);
         }
 
-        List<CommentBeLikedDto> commentDictLi = getCommentDictLi(infoComments, infoCommentLikeIds);
+        List<CommentDetailDto> commentDictLi = getCommentDictLi(infoComments, infoCommentLikeIds);
 
         Boolean isFollowed = false;
         if(infoNews.getUserId() != null && infoUser != null){
@@ -99,10 +92,8 @@ public class NewsController {
         model.addAttribute("is_followed",isFollowed);
         model.addAttribute("comments",commentDictLi);
 
-
-
 //        System.out.println(infoNews);
-        return "news/detail";
+        return "news/detail-temp";
     }
 
     private Boolean ifCollected(InfoUser infoUser, Integer newsId){
@@ -141,21 +132,29 @@ public class NewsController {
         return commentLikeIds;
     }
 
-    private List<CommentBeLikedDto> getCommentDictLi(List<InfoComment> infoComments, List<Integer> infoCommentLikeIds){
-        List<CommentBeLikedDto> commentDictLi = new LinkedList<>();
+    private List<CommentDetailDto> getCommentDictLi(List<InfoComment> infoComments, List<Integer> infoCommentLikeIds){
+        List<CommentDetailDto> commentDictLi = new LinkedList<>();
         for(InfoComment infoComment : infoComments){
-            CommentBeLikedDto commentBeLikedDto = new CommentBeLikedDto();
-            BeanUtils.copyProperties(infoComment, commentBeLikedDto);
-            commentBeLikedDto.setCreateTimeStr(
-                    DateUtil.formatDate2(commentBeLikedDto.getCreateTime()));
-            commentBeLikedDto.setLiked(false);
+            CommentDetailDto commentDetailDto = new CommentDetailDto();
+            BeanUtils.copyProperties(infoComment, commentDetailDto);
+            commentDetailDto.setCreateTimeStr(
+                    DateUtil.formatDate2(commentDetailDto.getCreateTime()));
+            commentDetailDto.setLiked(false);
 
             for(Integer commentLikeIds : infoCommentLikeIds){
                 if(infoComment.getId().equals(commentLikeIds)){
-                    commentBeLikedDto.setLiked(true);
+                    commentDetailDto.setLiked(true);
                 }
             }
-            commentDictLi.add(commentBeLikedDto);
+
+            commentDetailDto.setUser(userService.findUserById(commentDetailDto.getUserId()).get());
+            if(commentDetailDto.getParentId() != null) {
+                InfoComment parent = commentService.findCommentByCommentId(commentDetailDto.getParentId()).get();
+                parent.setUserNickName(userService.findUserById(parent.getUserId()).get().getNickName());
+                commentDetailDto.setParent(parent);
+            }
+
+            commentDictLi.add(commentDetailDto);
         }
         return  commentDictLi;
     }

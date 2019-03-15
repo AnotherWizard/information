@@ -2,7 +2,6 @@ package cn.edu.csu.information.dto;
 
 import lombok.Data;
 
-import java.util.Date;
 
 @Data
 public class UserShowDto {

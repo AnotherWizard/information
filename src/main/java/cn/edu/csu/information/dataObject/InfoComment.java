@@ -23,6 +23,9 @@ public class InfoComment implements Serializable {
 
     private Integer userId;
 
+    @Transient
+    private String userNickName;
+
     private Integer newsId;
 
     private Integer parentId;
