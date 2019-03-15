@@ -38,7 +38,7 @@
         <div class="detail_about clearfix">
             <span class="time_souce fl" th:text="${news.createTimeStr}+' 来源: ' + ${news.source}" ></span>
             <span class="comment fr" th:text="${news.commentsCount}"></span>
-            <br th:text="${news.content}">
+            <br th:utext="${news.content}">
         </div>
         <!--{{ data.news.content | safe }}-->
         <a href="javascript:;" class="collected block-center" th:data-newid="${news.id}"  th:switch="${is_collected}"  th:case="true" style="display: block "
@@ -114,6 +114,7 @@
             <!--{% endfor %}-->
         </div>
     </div>
+    </div>
 
     <!--{% block rankBlock %}-->
     <div class="rank_con fr">
@@ -146,7 +147,6 @@
     </div>
     <!--{% endblock %}-->
 
-</div>
 </div>
 
 <!--{% block bottomBlock %}-->
