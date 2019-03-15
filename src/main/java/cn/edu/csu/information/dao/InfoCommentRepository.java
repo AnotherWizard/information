@@ -10,5 +10,7 @@ public interface InfoCommentRepository extends JpaRepository<InfoComment,Integer
 
     List<InfoComment> findByNewsIdOrderByCreateTimeDesc(Integer newsId);
 
+    List<InfoComment> findByNewsId(Integer newsId);
+
 
 }

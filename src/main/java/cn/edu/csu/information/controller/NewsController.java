@@ -3,6 +3,8 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
 import cn.edu.csu.information.dto.CommentBeLikedDto;
+import cn.edu.csu.information.dto.NewsShowDto;
+import cn.edu.csu.information.dto.UserShowDto;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.CommentService;
 import cn.edu.csu.information.service.NewsService;
@@ -40,7 +42,6 @@ public class NewsController {
     private CommentService commentService;
 
     @GetMapping(value = "/{newsId}")
-    @ResponseBody
     public String newsDetail(Model model, @PathVariable("newsId") Integer newsId){
         InfoUser infoUser = null;
         /*** 此处获取用户登录信息 ***/
@@ -62,7 +63,7 @@ public class NewsController {
             infoCommentLikeIds = getCommentLikeIds(infoCommentLikes);
         }
 
-        List<CommentBeLikedDto> commentDicLi = getCommentDictLi(infoComments, infoCommentLikeIds);
+        List<CommentBeLikedDto> commentDictLi = getCommentDictLi(infoComments, infoCommentLikeIds);
 
         Boolean isFollowed = false;
         if(infoNews.getUserId() != null && infoUser != null){
@@ -76,21 +77,32 @@ public class NewsController {
         }else{
             model.addAttribute("user", null);
         }
-        model.addAttribute("news", infoNews);
+        UserShowDto userShowDto = null;
+        if(infoNews.getUserId() != null) {
+            userShowDto = new UserShowDto();
+            InfoUser authorUser = userService.findUserById(infoNews.getUserId()).get();
+            BeanUtils.copyProperties(authorUser, userShowDto);
+            userShowDto.setNewsCount(newsService.findNewsByUserId(userShowDto.getId()).size());
+            userShowDto.setFollowersCount(userService.findUserFansByFollowedId(userShowDto.getId()).size());
+        }
 
-//        data = {
-//                "user": user.to_dict() if user else None,
-//                "news_dict_li": news_dict_li,
-//                "news": news.to_dict(),
-//                "is_collected": is_collected,
-//                "is_followed": is_followed,
-//                "comments": comment_dict_li
-//        }
+        NewsShowDto newsShowDto = new NewsShowDto();
+        BeanUtils.copyProperties(infoNews, newsShowDto);
+        newsShowDto.setAuthor(userShowDto);
+        newsShowDto.setCommentsCount(commentService.findCommentByNewsId(newsId).size());
+        newsShowDto.setCreateTimeStr(DateUtil.formatDate2(newsShowDto.getCreateTime()));
+        newsShowDto.setCategory(categoryService.findCategoryById(infoNews.getCategoryId()));
+
+//        System.out.println(newsShowDto);
+        model.addAttribute("news", newsShowDto);
+        model.addAttribute("is_collected",isCollected);
+        model.addAttribute("is_followed",isFollowed);
+        model.addAttribute("comments",commentDictLi);
 
 
 
 //        System.out.println(infoNews);
-        return "I am news " + newsId;
+        return "news/detail";
     }
 
     private Boolean ifCollected(InfoUser infoUser, Integer newsId){

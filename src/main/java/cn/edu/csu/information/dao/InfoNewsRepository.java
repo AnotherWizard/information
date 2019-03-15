@@ -45,4 +45,6 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
 
     @Override
     Optional<InfoNews> findById(Integer integer);
+
+    List<InfoNews> findByUserId(Integer userId);
 }

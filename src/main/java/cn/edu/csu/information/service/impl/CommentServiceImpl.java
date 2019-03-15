@@ -28,5 +28,10 @@ public class CommentServiceImpl implements CommentService {
     public List<InfoCommentLike> findCommentLikeByCommentIdInAndUserId(List<Integer> commentIds, Integer userID) {
         return infoCommentLikeRepository.findByCommentIdInAndUserId(commentIds, userID);
     }
+
+    @Override
+    public List<InfoComment> findCommentByNewsId(Integer newsId) {
+        return infoCommentRepository.findByNewsId(newsId);
+    }
 }
 

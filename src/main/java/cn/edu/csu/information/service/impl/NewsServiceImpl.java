@@ -88,4 +88,9 @@ public class NewsServiceImpl implements NewsService {
     public Optional<InfoNews> findById(Integer integer) {
         return infoNewsRepository.findById(integer);
     }
+
+    @Override
+    public List<InfoNews> findNewsByUserId(Integer userId) {
+        return infoNewsRepository.findByUserId(userId);
+    }
 }

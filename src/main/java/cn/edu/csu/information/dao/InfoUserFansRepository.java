@@ -10,4 +10,6 @@ public interface InfoUserFansRepository  extends JpaRepository<InfoUserFans,Inte
 
     List<InfoUserFans> findByFollowerId(Integer followerId);
 
+    List<InfoUserFans> findByFollowedId(Integer followedId);
+
 }

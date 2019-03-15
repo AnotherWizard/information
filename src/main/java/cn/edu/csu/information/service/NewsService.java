@@ -46,4 +46,6 @@ public interface NewsService {
 
     Optional<InfoNews> findById(Integer integer);
 
+    List<InfoNews> findNewsByUserId(Integer userId);
+
 }

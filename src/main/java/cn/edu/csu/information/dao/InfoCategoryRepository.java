@@ -4,6 +4,7 @@ import cn.edu.csu.information.dataObject.InfoCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InfoCategoryRepository  extends JpaRepository<InfoCategory,Integer> {
 
@@ -12,5 +13,6 @@ public interface InfoCategoryRepository  extends JpaRepository<InfoCategory,Inte
      * @param id
      * @return
      */
- List<InfoCategory> findByIdNot(Integer id);
+    List<InfoCategory> findByIdNot(Integer id);
+
 }
