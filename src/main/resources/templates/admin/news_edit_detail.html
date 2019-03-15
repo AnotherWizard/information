@@ -24,7 +24,7 @@
             </div>
             <div class="form_group">
                 <label>新闻分类：</label>
-                <select class="sel_opt" name="category_id">
+                <select class="sel_opt" name="categoryId">
 
                         <option th:each="category:${categorys}"
                                 th:value="${category.id}"  th:selected="${category.id==infoNews.categoryId}" th:text="${category.name}" ></option>
@@ -53,7 +53,7 @@
 				<input type="submit" value="确定" class="confirm">
 				<input type="button" value="取消" class="cancel" onclick="cancel()">
 			</div>
-            <input type="hidden" name="news_id" th:value="${infoNews.id}">
+            <input type="hidden" name="id" th:value="${infoNews.id}">
 			</form>	
 		</div>
 
