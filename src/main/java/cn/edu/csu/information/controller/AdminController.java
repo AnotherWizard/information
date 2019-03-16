@@ -11,16 +11,24 @@ import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
+import cn.edu.csu.information.utils.SessionUtil;
 import cn.edu.csu.information.vo.UserCountVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -45,24 +53,56 @@ public class AdminController {
     @Resource
     private ImageStorage imageStorage;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("userId");
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+
+        if (userId != null && isAdmin != null) {
+            return "redirect:/admin/index";
+        }
         return "admin/login";
     }
 
     @PostMapping("/login")
-    public String login(Model model) {
+    public String login(@RequestParam(value = "username") String username,
+                        @RequestParam(value = "password") String password,
+                        HttpServletRequest request, HttpServletResponse response,
+                        Model model) {
 
-        log.info("post...login");
+        if (StringUtils.isEmpty(username) | StringUtils.isEmpty(password)) {
+            model.addAttribute("errmsg", ResultEnum.PARAMERR.getMsg());
+            return "admin/login";
+        }
 
-        model.addAttribute("errmsg", "参数错误");
-        return "admin/login";
+        InfoUser user = userService.findUserByMobile(username);
+        if (user == null || !user.getIsAdmin()) {
+            model.addAttribute("errmsg", ResultEnum.NO_USER.getMsg());
+            return "admin/login";
+        }
+
+        if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getPasswordHash())) {
+            model.addAttribute("errmsg", ResultEnum.PWDERR.getMsg());
+            return "admin/login";
+        }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("isAdmin", user.getIsAdmin());
+        SessionUtil.setSeesionAndToken(user, request, response, redisTemplate);
+
+        return "redirect:/admin/index";
     }
 
     @RequestMapping("/index")
-    public String index(Model model) {
+    public String index(HttpServletRequest request,Model model) {
 
-        model.addAttribute("user", userService.findUserByMobile("15289353925"));
+
+        model.addAttribute("user", SessionUtil.getUser(request,userService));
         return "admin/index";
     }
 
@@ -268,4 +308,17 @@ public class AdminController {
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
+
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request,
+                      HttpServletResponse response) {
+
+
+
+        SessionUtil.removeSeesionAndToken(request, response, redisTemplate);
+
+        return "redirect:login";
+    }
+
 }

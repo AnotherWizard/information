@@ -35,20 +35,20 @@ public class NewsController {
     private CommentService commentService;
 
     @RequestMapping(value = "/{newsId}")
-    public String newsDetail(Model model, @PathVariable("newsId") Integer newsId){
+    public String newsDetail(Model model, @PathVariable("newsId") Integer newsId) {
         InfoUser infoUser = null;
         /*** 此处获取用户登录信息 ***/
 //        infoUser = session.get(user)
 
         rankList(model, categoryService, newsService);
         InfoNews infoNews = newsService.findNewsById(newsId).getInfoNews();
-        infoNews.setClicks(infoNews.getClicks()+1);
+        infoNews.setClicks(infoNews.getClicks() + 1);
 
         List<InfoComment> infoComments = commentService.findCommentByNewsIdOrderByCreateTimeDesc(newsId);
 
         Boolean isCollected = false;
         List<Integer> infoCommentLikeIds = new LinkedList<>();
-        if(infoUser != null){
+        if (infoUser != null) {
             isCollected = ifCollected(infoUser, newsId);
 
             List<Integer> infoCommentIds = getCommentIds(infoComments);
@@ -59,21 +59,20 @@ public class NewsController {
         List<CommentDetailDto> commentDictLi = getCommentDictLi(infoComments, infoCommentLikeIds);
 
         Boolean isFollowed = false;
-        if(infoNews.getUserId() != null && infoUser != null){
+        if (infoNews.getUserId() != null && infoUser != null) {
             isFollowed = ifFollowed(infoNews, infoUser);
         }
 
-
-        if(infoUser != null){
+        if (infoUser != null) {
             /*** 此处要对infoUser做数据处理转化为dto(还没做) ***/
-            model.addAttribute("user",infoUser);
-        }else{
+            model.addAttribute("user", infoUser);
+        } else {
             model.addAttribute("user", null);
         }
         UserShowDto userShowDto = null;
-        if(infoNews.getUserId() != null) {
+        if (infoNews.getUserId() != null) {
             userShowDto = new UserShowDto();
-            InfoUser authorUser = userService.findUserById(infoNews.getUserId()).get();
+            InfoUser authorUser = userService.findUserById(infoNews.getUserId());
             BeanUtils.copyProperties(authorUser, userShowDto);
             userShowDto.setNewsCount(newsService.findNewsByUserId(userShowDto.getId()).size());
             userShowDto.setFollowersCount(userService.findUserFansByFollowedId(userShowDto.getId()).size());
@@ -88,76 +87,75 @@ public class NewsController {
 
 //        System.out.println(newsShowDto);
         model.addAttribute("news", newsShowDto);
-        model.addAttribute("is_collected",isCollected);
-        model.addAttribute("is_followed",isFollowed);
-        model.addAttribute("comments",commentDictLi);
+        model.addAttribute("is_collected", isCollected);
+        model.addAttribute("is_followed", isFollowed);
+        model.addAttribute("comments", commentDictLi);
 
 //        System.out.println(infoNews);
         return "news/detail-temp";
     }
 
-    private Boolean ifCollected(InfoUser infoUser, Integer newsId){
+    private Boolean ifCollected(InfoUser infoUser, Integer newsId) {
         List<InfoUserCollection> infoUserCollections = userService.findUserCollectionByUserId(infoUser.getId());
-        for(InfoUserCollection infoUserCollection : infoUserCollections){
-            if(infoUserCollection.getNewsId().equals(newsId)){
+        for (InfoUserCollection infoUserCollection : infoUserCollections) {
+            if (infoUserCollection.getNewsId().equals(newsId)) {
                 return CommonConstants.IS_COLLECTED;
             }
         }
-        return  CommonConstants.NOT_COLLECTED;
+        return CommonConstants.NOT_COLLECTED;
     }
 
-    private Boolean ifFollowed(InfoNews infoNews, InfoUser infoUser){
+    private Boolean ifFollowed(InfoNews infoNews, InfoUser infoUser) {
         List<InfoUserFans> infoUserFansList = userService.findUserFansByFollowerId(infoUser.getId());
-        for(InfoUserFans infoUserFans : infoUserFansList){
-            if (infoUserFans.getFollowedId().equals(infoNews.getUserId())){
+        for (InfoUserFans infoUserFans : infoUserFansList) {
+            if (infoUserFans.getFollowedId().equals(infoNews.getUserId())) {
                 return CommonConstants.IS_FOLLOWED;
             }
         }
         return CommonConstants.NOT_FOLLOWED;
     }
 
-    private List<Integer> getCommentIds(List<InfoComment> infoComments){
+    private List<Integer> getCommentIds(List<InfoComment> infoComments) {
         List<Integer> commentIds = new LinkedList<>();
-        for(InfoComment infoComment : infoComments){
+        for (InfoComment infoComment : infoComments) {
             commentIds.add(infoComment.getId());
         }
         return commentIds;
     }
 
-    private List<Integer> getCommentLikeIds(List<InfoCommentLike> infoCommentLikes){
+    private List<Integer> getCommentLikeIds(List<InfoCommentLike> infoCommentLikes) {
         List<Integer> commentLikeIds = new LinkedList<>();
-        for(InfoCommentLike infoCommentLike : infoCommentLikes){
+        for (InfoCommentLike infoCommentLike : infoCommentLikes) {
             commentLikeIds.add(infoCommentLike.getCommentId());
         }
         return commentLikeIds;
     }
 
-    private List<CommentDetailDto> getCommentDictLi(List<InfoComment> infoComments, List<Integer> infoCommentLikeIds){
+    private List<CommentDetailDto> getCommentDictLi(List<InfoComment> infoComments, List<Integer> infoCommentLikeIds) {
         List<CommentDetailDto> commentDictLi = new LinkedList<>();
-        for(InfoComment infoComment : infoComments){
+        for (InfoComment infoComment : infoComments) {
             CommentDetailDto commentDetailDto = new CommentDetailDto();
             BeanUtils.copyProperties(infoComment, commentDetailDto);
             commentDetailDto.setCreateTimeStr(
                     DateUtil.formatDate2(commentDetailDto.getCreateTime()));
             commentDetailDto.setLiked(false);
 
-            for(Integer commentLikeIds : infoCommentLikeIds){
-                if(infoComment.getId().equals(commentLikeIds)){
+            for (Integer commentLikeIds : infoCommentLikeIds) {
+                if (infoComment.getId().equals(commentLikeIds)) {
                     commentDetailDto.setLiked(true);
                 }
             }
 
-            commentDetailDto.setUser(userService.findUserById(commentDetailDto.getUserId()).get());
-            if(commentDetailDto.getParentId() != null) {
+            commentDetailDto.setUser(userService.findUserById(commentDetailDto.getUserId()));
+            if (commentDetailDto.getParentId() != null) {
                 InfoComment parent = commentService.findCommentByCommentId(commentDetailDto.getParentId()).get();
-                parent.setUserNickName(userService.findUserById(parent.getUserId()).get().getNickName());
+                parent.setUserNickName(userService.findUserById(parent.getUserId()).getNickName());
                 commentDetailDto.setParent(parent);
             }
 
             commentDictLi.add(commentDetailDto);
         }
-        return  commentDictLi;
+        return commentDictLi;
     }
-
 
 }

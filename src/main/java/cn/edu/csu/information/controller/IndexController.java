@@ -10,6 +10,7 @@ import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
+import cn.edu.csu.information.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,14 +92,8 @@ public class IndexController {
     public String index(HttpServletRequest request,
                         Model model) {
 
-        HttpSession session = request.getSession();
-        String mobile = (String) session.getAttribute("mobile");
-
-        if (!StringUtils.isEmpty(mobile)) {
-            InfoUser user = userService.findUserByMobile(mobile);
-            model.addAttribute(user);
-        }
-
+        InfoUser user = SessionUtil.getUser(request, userService);
+        model.addAttribute(user);
 
         rankList(model, categoryService, newsService);
 

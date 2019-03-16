@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author liu
@@ -32,8 +31,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<InfoUser> findUserById(Integer integer) {
-        return infoUserRepository.findById(integer);
+    public InfoUser findUserById(Integer integer) {
+        return infoUserRepository.findById(integer).get();
     }
 
     @Override

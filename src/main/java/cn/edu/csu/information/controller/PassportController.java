@@ -1,12 +1,11 @@
 package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.AdminConstants;
-import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.AdminUtil;
-import cn.edu.csu.information.utils.CookieUtil;
+import cn.edu.csu.information.utils.SessionUtil;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -145,7 +141,7 @@ public class PassportController {
         infoUser.setPasswordHash(DigestUtils.md5DigestAsHex(password.getBytes()));
         userService.updatOrAddUser(infoUser);
 
-        setSeesionAndToken(infoUser, request, response);
+        SessionUtil.setSeesionAndToken(infoUser, request, response,redisTemplate);
 
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
@@ -189,9 +185,8 @@ public class PassportController {
 
         infoUser.setLastLogin(new Date());
         userService.updatOrAddUser(infoUser);
-        setSeesionAndToken(infoUser, request, response);
+        SessionUtil.setSeesionAndToken(infoUser, request, response, redisTemplate);
 
-        userService.updatOrAddUser(infoUser);
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
@@ -204,42 +199,11 @@ public class PassportController {
 
         Map<String, Object> result = new HashMap<>();
 
-        removeSeesionAndToken(request, response);
+        SessionUtil.removeSeesionAndToken(request, response, redisTemplate);
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
 
-    private void setSeesionAndToken(InfoUser infoUser, HttpServletRequest request,
-                                    HttpServletResponse response) {
-        String token = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(String.format("%s%s", CommonConstants.TOKEN_PREFIX, token), infoUser.getMobile(),
-                CommonConstants.TOKEN_EXPIRE, TimeUnit.SECONDS);
-        CookieUtil.set(response, CommonConstants.COOKIE_TOKEN, token, CommonConstants.TOKEN_EXPIRE);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("userId", infoUser.getId());
-        session.setAttribute("mobile", infoUser.getMobile());
-        session.setAttribute("nickName", infoUser.getNickName());
-
-    }
-
-    private void removeSeesionAndToken(HttpServletRequest request,
-                                       HttpServletResponse response) {
-
-        Cookie cookie = CookieUtil.get(request, CommonConstants.COOKIE_TOKEN);
-
-        if (cookie != null) {
-            redisTemplate.opsForValue().getOperations().delete(String.format("%s%s", CommonConstants.TOKEN_PREFIX, cookie.getValue()));
-            CookieUtil.set(response, CommonConstants.COOKIE_TOKEN, null, 0);
-        }
-
-        HttpSession session = request.getSession();
-        session.removeAttribute("userId");
-        session.removeAttribute("mobile");
-        session.removeAttribute("nickName");
-        session.removeAttribute("isAdmin");
-
-    }
 
 }
