@@ -5,6 +5,7 @@ import cn.edu.csu.information.dataObject.*;
 import cn.edu.csu.information.dto.CommentDetailDto;
 import cn.edu.csu.information.dto.NewsShowDto;
 import cn.edu.csu.information.dto.UserShowDto;
+import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.CommentService;
 import cn.edu.csu.information.service.NewsService;
@@ -16,8 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static cn.edu.csu.information.controller.IndexController.rankList;
 
@@ -36,6 +39,7 @@ public class NewsController {
 
     @RequestMapping(value = "/{newsId}")
     public String newsDetail(Model model, @PathVariable("newsId") Integer newsId) {
+
         InfoUser infoUser = null;
         /*** 此处获取用户登录信息 ***/
 //        infoUser = session.get(user)
@@ -95,7 +99,38 @@ public class NewsController {
         return "news/detail-temp";
     }
 
-    private Boolean ifCollected(InfoUser infoUser, Integer newsId) {
+
+
+    @PostMapping(value = "/news_collect")
+    @ResponseBody
+    public Map<String,Object> newsCollect(@RequestParam(value = "newsid") Integer newsId,
+                                          @RequestParam(value = "action") String action){
+//        InfoUser user = null;
+//        infoUser = session.get(user)
+
+        Map<String,Object> jsonBag = new HashMap<>();
+        if(newsId == null || action == null || !(action.equals("collect") || action.equals("cancel_collect"))){
+            jsonBag.put("errmsg",ResultEnum.PARAMERR.getMsg());
+            jsonBag.put("errno",ResultEnum.PARAMERR.getCode());
+            return jsonBag;
+        }
+
+        InfoNews infoNews = newsService.findById(newsId).get();
+        if(infoNews == null){
+            jsonBag.put("errmsg",ResultEnum.NODATA.getMsg());
+            jsonBag.put("errno",ResultEnum.NODATA.getCode());
+            return jsonBag;
+        }
+
+//        if(action.equals("cancel_collect")){
+//            for()
+//        }
+        return jsonBag;
+
+    }
+
+    private Boolean ifCollected(InfoUser infoUser, Integer newsId){
+
         List<InfoUserCollection> infoUserCollections = userService.findUserCollectionByUserId(infoUser.getId());
         for (InfoUserCollection infoUserCollection : infoUserCollections) {
             if (infoUserCollection.getNewsId().equals(newsId)) {
