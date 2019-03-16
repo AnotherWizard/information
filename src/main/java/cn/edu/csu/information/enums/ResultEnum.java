@@ -18,6 +18,8 @@ public enum ResultEnum {
      */
     PARAMERR(201,"参数错误"),
 
+    NODATA(4002,"未查询到新闻数据"),
+
     /**
      * 参数错误
      */

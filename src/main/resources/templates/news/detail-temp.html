@@ -47,7 +47,7 @@
 
 
         <!--{% if data.user %}-->
-        <form action="" class="comment_form" data-newsid="{{ data.news.id }}">
+        <form action="" class="comment_form" th:data-newsid="${news.id}">
             <div class="person_pic">
                 <img src="{% if data.user.avatar_url %}
                         {{ data.user.avatar_url }}
