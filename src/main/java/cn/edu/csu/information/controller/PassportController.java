@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -196,6 +197,19 @@ public class PassportController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping("/logout")
+    public Map logout(HttpServletRequest request,
+                      HttpServletResponse response) {
+
+        Map<String, Object> result = new HashMap<>();
+
+        removeSeesionAndToken(request, response);
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+        return result;
+    }
+
     private void setSeesionAndToken(InfoUser infoUser, HttpServletRequest request,
                                     HttpServletResponse response) {
         String token = UUID.randomUUID().toString();
@@ -207,9 +221,25 @@ public class PassportController {
         session.setAttribute("userId", infoUser.getId());
         session.setAttribute("mobile", infoUser.getMobile());
         session.setAttribute("nickName", infoUser.getNickName());
-        session.removeAttribute("jjjjjjjjjjj");
+
     }
 
+    private void removeSeesionAndToken(HttpServletRequest request,
+                                       HttpServletResponse response) {
 
+        Cookie cookie = CookieUtil.get(request, CommonConstants.COOKIE_TOKEN);
+
+        if (cookie != null) {
+            redisTemplate.opsForValue().getOperations().delete(String.format("%s%s", CommonConstants.TOKEN_PREFIX, cookie.getValue()));
+            CookieUtil.set(response, CommonConstants.COOKIE_TOKEN, null, 0);
+        }
+
+        HttpSession session = request.getSession();
+        session.removeAttribute("userId");
+        session.removeAttribute("mobile");
+        session.removeAttribute("nickName");
+        session.removeAttribute("isAdmin");
+
+    }
 
 }

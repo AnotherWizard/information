@@ -23,18 +23,19 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        log.info("拦截到请求:{}",request.getServletPath());
         Cookie cookie = CookieUtil.get(request, CommonConstants.COOKIE_TOKEN);
         if (cookie == null) {
             log.info("未登录");
 //            response.sendRedirect("/");
-//            return false;
+            return true;
         }
 
         String token = redisTemplate.opsForValue().get(String.format("%s%s",CommonConstants.TOKEN_PREFIX,cookie.getValue()));
         if (StringUtils.isEmpty(token)){
             log.info("登录过期");
 //            response.sendRedirect("/");
-//            return false;
+            return true;
         }
 
 
