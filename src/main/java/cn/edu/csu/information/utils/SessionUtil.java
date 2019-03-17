@@ -51,6 +51,9 @@ public class SessionUtil {
     public static InfoUser getUser(HttpServletRequest request, UserService userService) {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
+        if (userId==null){
+            return null;
+        }
         return userService.findUserById(userId);
 
     }

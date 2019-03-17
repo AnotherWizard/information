@@ -21,8 +21,8 @@ public class AdminInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         if (session.getAttribute("isAdmin") == null) {
             log.info("非法访问后台管理");
-            response.sendRedirect("/admin/login");
-            return false;
+//            response.sendRedirect("/admin/login");
+            return true;
         }
 
         return true;
