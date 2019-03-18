@@ -11,12 +11,14 @@ import cn.edu.csu.information.service.CommentService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.DateUtil;
+import cn.edu.csu.information.utils.SessionUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,11 +40,12 @@ public class NewsController {
     private CommentService commentService;
 
     @RequestMapping(value = "/{newsId}")
-    public String newsDetail(Model model, @PathVariable("newsId") Integer newsId) {
+    public String newsDetail(HttpServletRequest request, Model model, @PathVariable("newsId") Integer newsId) {
 
-        InfoUser infoUser = null;
-        /*** 此处获取用户登录信息 ***/
-//        infoUser = session.get(user)
+        InfoUser infoUser = SessionUtil.getUser(request, userService);
+        if (infoUser!=null){
+            model.addAttribute("user",infoUser);
+        }
 
         rankList(model, categoryService, newsService);
         InfoNews infoNews = newsService.findNewsById(newsId).getInfoNews();

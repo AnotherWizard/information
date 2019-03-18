@@ -94,7 +94,7 @@ public class IndexController {
 
         InfoUser user = SessionUtil.getUser(request, userService);
         if (user!=null){
-            model.addAttribute(user);
+            model.addAttribute("user",user);
         }
 
         rankList(model, categoryService, newsService);
