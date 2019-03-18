@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>用户中心</title>
@@ -17,14 +17,15 @@
         <div class="form-group"><label>新闻标题：</label><input type="text" class="input_txt2" name="title"></div>
         <div class="form-group">
             <label>新闻分类：</label>
-            <select class="sel_opt" name="category_id">
-                {% for category in data.categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endfor %}
+            <select class="sel_opt" name="categoryId">
+
+                    <option th:each="category:${infoCategoryList}"
+                            th:value="${category.id}" th:text="${category.name}"></option>
+
             </select>
         </div>
         <div class="form-group"><label>摘要：</label><textarea class="input_multxt" name="digest"></textarea></div>
-        <div class="form-group"><label>上传图片：</label><input type="file" name="index_image" class="input_file"></div>
+        <div class="form-group"><label>上传图片：</label><input type="file" name="indexImage" class="input_file"></div>
         <div class="form-group">
             <label>内容：</label>
             <div class="fl"><input class="input_area" id="rich_content" name="content" value=" "></input></div>
