@@ -15,25 +15,24 @@
 <body>
 
 <!--<div class="user_login fr">-->
-    <!--&lt;!&ndash;<img src="{% if data.user.avatar_url %} {{ data.user.avatar_url }} {% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">&ndash;&gt;-->
-    <!--<img src="../../static/admin/images/person.png" alt="张大山">-->
-    <!--<a href="/user/info" id="nick_name"><em th:text="${user.nickName}"></em></a>-->
-    <!--<a href="javascript:;" onclick="logout()">退出</a>-->
+<!--&lt;!&ndash;<img src="{% if data.user.avatar_url %} {{ data.user.avatar_url }} {% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">&ndash;&gt;-->
+<!--<img src="../../static/admin/images/person.png" alt="张大山">-->
+<!--<a href="/user/info" id="nick_name"><em th:text="${user.nickName}"></em></a>-->
+<!--<a href="javascript:;" onclick="logout()">退出</a>-->
 <!--</div>-->
-
 
 
 <div class="header_con">
     <div class="header">
         <a href="/" class="logo fl"><img src="../../static/news/images/logo.png" alt="logo"></a>
         <!--<ul class="menu fl">-->
-            <!--{% for category in data.category_li %}-->
-            <!--{% if loop.index == 1 %}-->
-            <!--<li data-cid="{{ category.id }}" class="active"><a href="javascript:;">{{ category.name }}</a></li>-->
-            <!--{% else %}-->
-            <!--<li data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>-->
-            <!--{% endif %}-->
-            <!--{% endfor %}-->
+        <!--{% for category in data.category_li %}-->
+        <!--{% if loop.index == 1 %}-->
+        <!--<li data-cid="{{ category.id }}" class="active"><a href="javascript:;">{{ category.name }}</a></li>-->
+        <!--{% else %}-->
+        <!--<li data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>-->
+        <!--{% endif %}-->
+        <!--{% endfor %}-->
         <!--</ul>-->
         <!--{% endblock %}-->
         <!--{% if data.user %}-->
@@ -45,33 +44,39 @@
         </div>
         <!--{% else %}-->
         <!--<div class="user_btns fr">-->
-            <!--<a href="javascript:;" class="login_btn">登录</a> / <a href="javascript:;" class="register_btn">注册</a>-->
+        <!--<a href="javascript:;" class="login_btn">登录</a> / <a href="javascript:;" class="register_btn">注册</a>-->
         <!--</div>-->
         <!--{% endif %}-->
     </div>
 </div>
+<div class="conter_con">
 
 
+    <div class="user_menu_con fl">
+        <div class="user_center_pic">
+            <img src="../../static/admin/images/person.png" alt="张大山">
+        </div>
 
-<div class="user_menu_con fl">
-    <div class="user_center_pic">
-        <img src="../../static/admin/images/person.png" alt="张大山">
+
+        <div class="user_center_name"><em th:text="${user.nickName}"> 刘总 </em></div>
+
+        <ul class="option_list">
+            <li class="active"><a href="" target="main_frame">基本资料</a></li>
+            <li><a href="" target="main_frame">头像设置</a></li>
+            <li><a href="" target="main_frame">我的关注</a></li>
+            <li><a href="" target="main_frame">密码修改</a></li>
+            <li><a href="" target="main_frame">我的收藏</a></li>
+            <li><a href="" target="main_frame">新闻发布</a></li>
+            <li><a href="" target="main_frame">新闻列表</a></li>
+        </ul>
     </div>
 
+    <div class="user_con fr">
+        <iframe src="{{ url_for(" profile.base_info
+        ") }}" frameborder="0" name="main_frame" class="main_frame" id="main_frame"></iframe>
+    </div>
 
-    <div class="user_center_name"><em th:text="${user.nickName}"> 刘总 </em></div>
-
-    <ul class="option_list">
-        <li class="active"><a href="" target="main_frame">基本资料</a></li>
-        <li><a href="" target="main_frame">头像设置</a></li>
-        <li><a href="" target="main_frame">我的关注</a></li>
-        <li><a href="" target="main_frame">密码修改</a></li>
-        <li><a href="" target="main_frame">我的收藏</a></li>
-        <li><a href="" target="main_frame">新闻发布</a></li>
-        <li><a href="" target="main_frame">新闻列表</a></li>
-    </ul>
 </div>
-
 <div class="footer">
     <div class="footer_links">
         <a href="">关于我们</a>
@@ -83,8 +88,8 @@
         <a href="">友情链接</a>
     </div>
     <p class="copyright">
-        CopyRight © 2018 新经资讯信息技术有限公司 All Rights Reserved<br />
-        电话：010-****888    京ICP备*******8号
+        CopyRight © 2018 新经资讯信息技术有限公司 All Rights Reserved<br/>
+        电话：010-****888 京ICP备*******8号
     </p>
 </div>
 

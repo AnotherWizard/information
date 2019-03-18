@@ -1,13 +1,15 @@
 package cn.edu.csu.information.controller;
 
-
+import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.service.UserService;
+import cn.edu.csu.information.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller
@@ -17,13 +19,11 @@ public class ProfileController {
     private UserService userService;
 
     @RequestMapping("/info")
-    public String index(Model model) {
+    public String index(HttpServletRequest request, Model model) {
 
-        model.addAttribute("user", userService.findUserByMobile("13387678328"));
+        InfoUser user = SessionUtil.getUser(request, userService);
+        model.addAttribute("user", user);
         return "news/user";
     }
-
-
-
 
 }
