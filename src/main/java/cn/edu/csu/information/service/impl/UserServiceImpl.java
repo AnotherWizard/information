@@ -83,12 +83,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public InfoUserCollection save(InfoUserCollection userCollection) {
+    public InfoUserCollection saveUserCollection(InfoUserCollection userCollection) {
         return infoUserCollectionRepository.saveAndFlush(userCollection);
     }
 
     @Override
-    public InfoUserFans save(InfoUserFans infoUserFans) {
+    public InfoUserFans saveUserFans(InfoUserFans infoUserFans) {
         return infoUserFansRepository.save(infoUserFans);
     }
 }

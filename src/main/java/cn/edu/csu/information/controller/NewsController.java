@@ -59,17 +59,21 @@ public class NewsController {
             return noDataErr();
         }
 
+        boolean isFollowed = false;
+
         if(action.equals("follow")){
             List<InfoUserFans> userFolloweds = userService.findUserFansByFollowerId(userId);
-            boolean isFollowed = false;
             for(InfoUserFans userFollowed : userFolloweds){
                 if(userFollowed.getFollowedId().equals(other.getId())){
                     isFollowed = true;
                 }
             }
-//            if(!isFollowed){
-//
-//            }
+            if(!isFollowed){
+                InfoUserFans userFans = new InfoUserFans(userId,other.getId());
+                userService.saveUserFans(userFans);
+            }
+        }else{
+
         }
 
         return okMsg();
@@ -111,7 +115,7 @@ public class NewsController {
             InfoUserCollectionMultiKey userCollectionMultiKey = new InfoUserCollectionMultiKey(user.getId(),newsId);
 
             InfoUserCollection userCollection = new InfoUserCollection(user.getId(),newsId,new Date());
-            userService.save(userCollection);
+            userService.saveUserCollection(userCollection);
         }
 
         return okMsg();

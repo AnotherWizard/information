@@ -14,4 +14,7 @@ public interface InfoUserFansRepository  extends JpaRepository<InfoUserFans,Inte
 
     @Override
     <S extends InfoUserFans> S save(S s);
+
+    @Override
+    void deleteById(Integer integer);
 }

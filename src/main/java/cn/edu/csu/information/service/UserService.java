@@ -57,9 +57,11 @@ public interface UserService {
 
     void deleteUserCollectionById(InfoUserCollectionMultiKey infoUserCollectionMultiKey);
 
-    InfoUserCollection save(InfoUserCollection userCollection);
+    InfoUserCollection saveUserCollection(InfoUserCollection userCollection);
 
-    InfoUserFans save(InfoUserFans infoUserFans);
+    InfoUserFans saveUserFans(InfoUserFans infoUserFans);
+
+//    void deleteUserI
 
 
 }

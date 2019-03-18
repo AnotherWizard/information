@@ -17,6 +17,15 @@ public class InfoUserFans implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public InfoUserFans(Integer followerId, Integer followedId){
+        this.followerId = followerId;
+        this.followedId = followedId;
+    }
+
+    public InfoUserFans(){
+
+    }
+
     public Integer getFollowerId() {
         return followerId;
     }
