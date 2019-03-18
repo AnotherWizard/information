@@ -38,7 +38,9 @@
         <!--{% if data.user %}-->
         <!-- 用户登录后显示下面，隐藏上面 -->
         <div class="user_login fr">
-            <img src="../../static/admin/images/person.png" alt="张大山" class="lgin_pic">
+            <img th:src="${user?.avatarUrl==null} ? '../../static/news/images/user_pic.png' :${user.avatarUrl}"
+                 alt="张大山" class="lgin_pic"
+            >
             <a href="/user/info" id="nick_name"><em th:text="${user.nickName}"></em></a>
             <a href="javascript:;" onclick="logout()">退出</a>
         </div>
@@ -54,7 +56,9 @@
 
     <div class="user_menu_con fl">
         <div class="user_center_pic">
-            <img src="../../static/admin/images/person.png" alt="张大山">
+            <img th:src="${user?.avatarUrl==null} ? '../../static/news/images/user_pic.png' :${user.avatarUrl}"
+                 alt="用户图片"
+            >
         </div>
 
 
@@ -62,7 +66,8 @@
 
         <ul class="option_list">
             <li class="active"><a href="/user/base_info" target="main_frame">基本资料</a></li>
-            <li><a href="" target="main_frame">头像设置</a></li>
+
+            <li><a href="/user/pic_info" target="main_frame">头像设置</a></li>
             <li><a href="" target="main_frame">我的关注</a></li>
             <li><a href="" target="main_frame">密码修改</a></li>
             <li><a href="" target="main_frame">我的收藏</a></li>
