@@ -19,11 +19,19 @@ public class ProfileController {
     private UserService userService;
 
     @RequestMapping("/info")
-    public String index(HttpServletRequest request, Model model) {
+    public String User(HttpServletRequest request, Model model) {
 
         InfoUser user = SessionUtil.getUser(request, userService);
         model.addAttribute("user", user);
         return "news/user";
     }
+    @RequestMapping("/base_info")
+    public String UserBaseInfo(HttpServletRequest request,Model model){
+        InfoUser user = SessionUtil.getUser(request, userService);
+        model.addAttribute("user", user);
+        return "/news/user_base_info";
+    }
+
+
 
 }
