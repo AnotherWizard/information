@@ -12,4 +12,10 @@ public interface InfoUserCollectionRepository extends JpaRepository<InfoUserColl
     InfoUserCollection findByUserIdAndNewsId(Integer userId,Integer newsId);
 
     List<InfoUserCollection> findByUserId(Integer userId);
+
+    @Override
+    void deleteById(InfoUserCollectionMultiKey infoUserCollectionMultiKey);
+
+    @Override
+    <S extends InfoUserCollection> S saveAndFlush(S s);
 }

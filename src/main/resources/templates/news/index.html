@@ -26,7 +26,7 @@
             <img th:case="false" th:src="../../static/news/images/person01.png" class ="lgin_pic">
             </span>
 
-            <a href="/user/info" id="nick_name" th:text="${user.nickName}">{{ data.user.nick_name }}</a>
+            <a href="/user/info" id="nick_name" th:text="${user.nickName}"></a>
             <a href="javascript:;" onclick="logout()">退出</a>
         </div>
         <div class="user_btns fr" th:case="false">
