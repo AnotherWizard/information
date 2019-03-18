@@ -47,7 +47,7 @@ public class ProfileController {
     private NewsService newsService;
 
     @RequestMapping("/info")
-    public String index(HttpServletRequest request, Model model) {
+    public String User(HttpServletRequest request, Model model) {
 
         InfoUser user = SessionUtil.getUser(request, userService);
 
@@ -57,6 +57,14 @@ public class ProfileController {
         model.addAttribute("user", user);
         return "news/user";
     }
+    @RequestMapping("/base_info")
+    public String UserBaseInfo(HttpServletRequest request,Model model){
+        InfoUser user = SessionUtil.getUser(request, userService);
+        model.addAttribute("user", user);
+        return "/news/user_base_info";
+    }
+
+
 
     @GetMapping("/pic_info")
     public String picInfo(HttpServletRequest request, Model model) {

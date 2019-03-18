@@ -12,4 +12,13 @@ public class InfoUserCollectionMultiKey implements Serializable {
     private Integer userId;
     private Integer newsId;
 
+    public InfoUserCollectionMultiKey(Integer userId, Integer newsId){
+        this.userId = userId;
+        this.newsId = newsId;
+    }
+
+    public InfoUserCollectionMultiKey(){
+
+    }
+
 }

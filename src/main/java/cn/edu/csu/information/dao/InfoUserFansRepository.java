@@ -12,4 +12,9 @@ public interface InfoUserFansRepository  extends JpaRepository<InfoUserFans,Inte
 
     List<InfoUserFans> findByFollowedId(Integer followedId);
 
+    @Override
+    <S extends InfoUserFans> S save(S s);
+
+    @Override
+    void deleteById(Integer integer);
 }

@@ -2,6 +2,7 @@ package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
 import cn.edu.csu.information.dto.CommentDetailDto;
 import cn.edu.csu.information.dto.NewsShowDto;
 import cn.edu.csu.information.dto.UserShowDto;
@@ -19,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cn.edu.csu.information.controller.IndexController.rankList;
 
@@ -38,6 +36,91 @@ public class NewsController {
     private UserService userService;
     @Resource
     private CommentService commentService;
+
+    @PostMapping(value = "/followed_user")
+    @ResponseBody
+    public Map<String, Object> followedUser(@RequestBody Map<String, Object> map,HttpServletRequest request){
+        String userIdstr = (String) map.get("user_id");
+        Integer userId = Integer.parseInt(userIdstr);
+        String action = (String) map.get("action");
+
+//        Map<String,Object> jsonBag = new HashMap<>();
+        InfoUser user = SessionUtil.getUser(request, userService);
+        if (user == null){
+            return sessionErr();
+        }
+
+        if(userId == null || action == null || !(action.equals("follow") || action.equals("unfollow"))){
+            return paramErr();
+        }
+
+        InfoUser other = userService.findUserById(userId);
+        if(other == null){
+            return noDataErr();
+        }
+
+        boolean isFollowed = false;
+
+        if(action.equals("follow")){
+            List<InfoUserFans> userFolloweds = userService.findUserFansByFollowerId(userId);
+            for(InfoUserFans userFollowed : userFolloweds){
+                if(userFollowed.getFollowedId().equals(other.getId())){
+                    isFollowed = true;
+                }
+            }
+            if(!isFollowed){
+                InfoUserFans userFans = new InfoUserFans(userId,other.getId());
+                userService.saveUserFans(userFans);
+            }
+        }else{
+
+        }
+
+        return okMsg();
+
+
+    }
+
+    @PostMapping(value = "/news_collect")
+    @ResponseBody
+    public Map<String,Object> newsCollect(@RequestBody Map<String, Object> map,HttpServletRequest request){
+        String newsIdstr = (String) map.get("news_id");
+        Integer newsId = Integer.parseInt(newsIdstr);
+        String action = (String) map.get("action");
+
+//        Map<String,Object> jsonBag = new HashMap<>();
+        InfoUser user = SessionUtil.getUser(request, userService);
+        if (user == null){
+            return sessionErr();
+        }
+
+        if(newsId == null || action == null || !(action.equals("collect") || action.equals("cancel_collect"))){
+            return paramErr();
+        }
+
+        Optional<InfoNews> infoNews = newsService.findById(newsId);
+        if(!infoNews.isPresent()){
+            return noDataErr();
+        }
+
+        if(action.equals("cancel_collect")){
+            List<InfoUserCollection> userCollections = userService.findUserCollectionByUserId(user.getId());
+            for(InfoUserCollection userCollection : userCollections){
+                if(newsId.equals(userCollection.getNewsId())){
+                    InfoUserCollectionMultiKey userCollectionMultiKey = new InfoUserCollectionMultiKey(user.getId(), newsId);
+                    userService.deleteUserCollectionById(userCollectionMultiKey);
+                }
+            }
+        }else{
+            InfoUserCollectionMultiKey userCollectionMultiKey = new InfoUserCollectionMultiKey(user.getId(),newsId);
+
+            InfoUserCollection userCollection = new InfoUserCollection(user.getId(),newsId,new Date());
+            userService.saveUserCollection(userCollection);
+        }
+
+        return okMsg();
+
+    }
 
     @RequestMapping(value = "/{newsId}")
     public String newsDetail(HttpServletRequest request, Model model, @PathVariable("newsId") Integer newsId) {
@@ -99,37 +182,35 @@ public class NewsController {
         model.addAttribute("comments", commentDictLi);
 
 //        System.out.println(infoNews);
-        return "news/detail-temp";
+        return "news/detail";
     }
 
-
-
-    @PostMapping(value = "/news_collect")
-    @ResponseBody
-    public Map<String,Object> newsCollect(@RequestParam(value = "newsid") Integer newsId,
-                                          @RequestParam(value = "action") String action){
-//        InfoUser user = null;
-//        infoUser = session.get(user)
-
+    private Map<String,Object> sessionErr(){
         Map<String,Object> jsonBag = new HashMap<>();
-        if(newsId == null || action == null || !(action.equals("collect") || action.equals("cancel_collect"))){
-            jsonBag.put("errmsg",ResultEnum.PARAMERR.getMsg());
-            jsonBag.put("errno",ResultEnum.PARAMERR.getCode());
-            return jsonBag;
-        }
-
-        InfoNews infoNews = newsService.findById(newsId).get();
-        if(infoNews == null){
-            jsonBag.put("errmsg",ResultEnum.NODATA.getMsg());
-            jsonBag.put("errno",ResultEnum.NODATA.getCode());
-            return jsonBag;
-        }
-
-//        if(action.equals("cancel_collect")){
-//            for()
-//        }
+        jsonBag.put("errmsg",ResultEnum.SESSIONERR.getMsg());
+        jsonBag.put("errno",ResultEnum.SESSIONERR.getCode());
         return jsonBag;
+    }
 
+    private Map<String,Object> paramErr(){
+        Map<String,Object> jsonBag = new HashMap<>();
+        jsonBag.put("errmsg",ResultEnum.PARAMERR.getMsg());
+        jsonBag.put("errno",ResultEnum.PARAMERR.getCode());
+        return jsonBag;
+    }
+
+    private Map<String,Object> noDataErr(){
+        Map<String,Object> jsonBag = new HashMap<>();
+        jsonBag.put("errmsg",ResultEnum.NODATA.getMsg());
+        jsonBag.put("errno",ResultEnum.NODATA.getCode());
+        return jsonBag;
+    }
+
+    private Map<String,Object> okMsg(){
+        Map<String,Object> jsonBag = new HashMap<>();
+        jsonBag.put("errmsg",ResultEnum.OK.getMsg());
+        jsonBag.put("errno",ResultEnum.OK.getCode());
+        return jsonBag;
     }
 
     private Boolean ifCollected(InfoUser infoUser, Integer newsId){

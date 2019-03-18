@@ -20,6 +20,16 @@ public class InfoUserCollection implements Serializable {
 
     private Date createTime;
 
+    public InfoUserCollection(Integer userId, Integer newsId, Date createTime){
+        this.userId = userId;
+        this.newsId = newsId;
+        this.createTime = createTime;
+    }
+
+    public InfoUserCollection(){
+
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Integer getUserId() {
