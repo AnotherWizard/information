@@ -2,6 +2,7 @@ package cn.edu.csu.information.service;
 
 import cn.edu.csu.information.dataObject.*;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserFansMultiKey;
 
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,8 @@ public interface UserService {
     InfoUserCollection saveUserCollection(InfoUserCollection userCollection);
 
     InfoUserFans saveUserFans(InfoUserFans infoUserFans);
+
+    void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey);
 
 //    void deleteUserI
 

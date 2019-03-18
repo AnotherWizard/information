@@ -132,8 +132,8 @@
             <div class="author_resume" th:text="'签名: '+ ${news.author.signature}"></div>
             <div class="writings"><span>总篇数</span><b th:text="${news.author.newsCount}"></b></div>
             <div class="follows"><span>粉丝</span><b th:text="${news.author.followersCount}"></b></div>
-            <a href="javascript:;" class="focus fr" th:data-userid="${news.author.id}" th:switch="${is_followed}" th:case="false" style="display:block">关注</a>
-            <a href="javascript:;" class="focused fr" th:data-userid="${news.author.id}" th:switch="${is_followed}" th:case="true" style="display:block"><span class="out">已关注</span><span class="over">取消关注</span></a>
+            <a href="javascript:;" class="focus fr" th:data-userid="${news.author.id}"  th:style="${is_followed}?'display:none':'display:block'">关注</a>
+            <a href="javascript:;" class="focused fr" th:data-userid="${news.author.id}"  th:style="${is_followed}?'display:block':'display:none'"><span class="out">已关注</span><span class="over">取消关注</span></a>
         </div>
         <!--{% endif %}-->
 

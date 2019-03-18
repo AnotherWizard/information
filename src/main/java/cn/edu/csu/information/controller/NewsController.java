@@ -3,6 +3,7 @@ package cn.edu.csu.information.controller;
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserFansMultiKey;
 import cn.edu.csu.information.dto.CommentDetailDto;
 import cn.edu.csu.information.dto.NewsShowDto;
 import cn.edu.csu.information.dto.UserShowDto;
@@ -40,15 +41,17 @@ public class NewsController {
     @PostMapping(value = "/followed_user")
     @ResponseBody
     public Map<String, Object> followedUser(@RequestBody Map<String, Object> map,HttpServletRequest request){
-        String userIdstr = (String) map.get("user_id");
-        Integer userId = Integer.parseInt(userIdstr);
-        String action = (String) map.get("action");
-
-//        Map<String,Object> jsonBag = new HashMap<>();
         InfoUser user = SessionUtil.getUser(request, userService);
         if (user == null){
             return sessionErr();
         }
+
+        String userIdstr = (String) map.get("user_id");
+        Integer userId = null;
+        if(userIdstr != null) {
+            userId = Integer.parseInt(userIdstr);
+        }
+        String action = (String) map.get("action");
 
         if(userId == null || action == null || !(action.equals("follow") || action.equals("unfollow"))){
             return paramErr();
@@ -73,8 +76,51 @@ public class NewsController {
                 userService.saveUserFans(userFans);
             }
         }else{
-
+            InfoUserFansMultiKey userFansMultiKey = new InfoUserFansMultiKey(userId, other.getId());
+            userService.deleteFansById(userFansMultiKey);
         }
+
+        return okMsg();
+    }
+
+    @PostMapping(value = "/news_comment")
+    @ResponseBody
+    public Map<String,Object> newsComment(@RequestBody Map<String, Object> map,HttpServletRequest request){
+        InfoUser user = SessionUtil.getUser(request, userService);
+        if (user == null){
+            return sessionErr();
+        }
+
+        String newsIdstr = (String) map.get("news_id");
+        String comment_content = (String) map.get("comment");
+        String parentIdstr = (String) map.get("parent_id");
+        Integer parentId = null;
+        Integer newsId = null;
+        if(newsIdstr != null){
+            newsId = Integer.parseInt(newsIdstr);
+        }else{
+            return paramErr();
+        }
+
+        if(comment_content == null){
+            return paramErr();
+        }
+
+        Optional<InfoNews> infoNews = newsService.findById(newsId);
+        if(!infoNews.isPresent()){
+            return noDataErr();
+        }
+
+        InfoComment comment = new InfoComment();
+        comment.setNewsId(newsId);
+        comment.setUserId(user.getId());
+        comment.setContent(comment_content);
+        if(parentIdstr != null){
+            parentId = Integer.parseInt(parentIdstr);
+            comment.setParentId(parentId);
+        }
+
+        commentService.saveComment(comment);
 
         return okMsg();
 
@@ -84,15 +130,17 @@ public class NewsController {
     @PostMapping(value = "/news_collect")
     @ResponseBody
     public Map<String,Object> newsCollect(@RequestBody Map<String, Object> map,HttpServletRequest request){
-        String newsIdstr = (String) map.get("news_id");
-        Integer newsId = Integer.parseInt(newsIdstr);
-        String action = (String) map.get("action");
-
-//        Map<String,Object> jsonBag = new HashMap<>();
         InfoUser user = SessionUtil.getUser(request, userService);
         if (user == null){
             return sessionErr();
         }
+
+        String newsIdstr = (String) map.get("news_id");
+        Integer newsId = null;
+        if(newsIdstr != null){
+            newsId = Integer.parseInt(newsIdstr);
+        }
+        String action = (String) map.get("action");
 
         if(newsId == null || action == null || !(action.equals("collect") || action.equals("cancel_collect"))){
             return paramErr();

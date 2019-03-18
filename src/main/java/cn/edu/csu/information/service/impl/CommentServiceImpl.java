@@ -39,5 +39,10 @@ public class CommentServiceImpl implements CommentService {
     public Optional<InfoComment> findCommentByCommentId(Integer commentId) {
         return infoCommentRepository.findById(commentId);
     }
+
+    @Override
+    public InfoComment saveComment(InfoComment infoComment) {
+        return infoCommentRepository.save(infoComment);
+    }
 }
 

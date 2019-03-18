@@ -83,8 +83,6 @@ public class IndexController {
         jsonBag.put("errno", ResultEnum.OK.getCode());
         jsonBag.put("errmsg", ResultEnum.OK.getMsg());
 
-//        System.out.println("总条数："+newsOrderedPage.getTotalElements());
-//        System.out.println("总页数："+newsOrderedPage.getTotalPages());
         return jsonBag;
     }
 
