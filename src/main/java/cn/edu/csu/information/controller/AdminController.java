@@ -207,7 +207,7 @@ public class AdminController {
         }
 
         news.setUpdateTime(new Date());
-        newsService.updateNews(news);
+        newsService.updateOrAddNews(news);
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
 
@@ -257,7 +257,7 @@ public class AdminController {
         news.setTitle(infoNews.getTitle());
         news.setDigest(infoNews.getDigest());
         news.setContent(infoNews.getContent());
-        newsService.updateNews(news);
+        newsService.updateOrAddNews(news);
 
         Map<String, Object> result = new HashMap<>();
         result.put("errno", ResultEnum.OK.getCode());

@@ -80,7 +80,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public InfoNews updateNews(InfoNews infoNews) {
+    public InfoNews updateOrAddNews(InfoNews infoNews) {
         return infoNewsRepository.save(infoNews);
     }
 
