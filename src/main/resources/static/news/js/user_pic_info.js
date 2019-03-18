@@ -18,9 +18,9 @@ $(function () {
             },
             success: function (resp) {
                 if (resp.errno == "0") {
-                    $(".now_user_pic").attr("src", resp.data.avatar_url)
-                    $(".user_center_pic>img", parent.document).attr("src", resp.data.avatar_url)
-                    $(".user_login>img", parent.document).attr("src", resp.data.avatar_url)
+                    $(".now_user_pic").attr("src", resp.avatar_url)
+                    $(".user_center_pic>img", parent.document).attr("src", resp.avatar_url)
+                    $(".user_login>img", parent.document).attr("src", resp.avatar_url)
                 }else {
                     alert(resp.errmsg)
                 }
