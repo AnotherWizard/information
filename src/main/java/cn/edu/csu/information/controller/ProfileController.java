@@ -215,7 +215,7 @@ public class ProfileController {
 
     @RequestMapping("/collection")
     public String collection(@RequestParam(value = "p", defaultValue = "1") Integer page,
-                           HttpServletRequest request, Model model) {
+                             HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
 //        Pageable pageable = PageRequest.of(page - 1, CommonConstants.DEFAULT_PAGE_SIZE);
         List<InfoNews> news = userService.findUserCollection(user.getId());
@@ -247,10 +247,30 @@ public class ProfileController {
         InfoUser user = SessionUtil.getUser(request, userService);
 
         List<UserShowDto> userShowDtoList = userService.findUserFollowed(user.getId());
-        model.addAttribute("userList",userShowDtoList );
-        model.addAttribute("total_page",1);
+        model.addAttribute("userList", userShowDtoList);
+        model.addAttribute("total_page", 1);
         model.addAttribute("current_page", page);
 
         return "news/user_follow";
+    }
+
+    @RequestMapping("/other_news_list")
+    @ResponseBody
+    public Map otherNewsList(@RequestParam(value = "user_id") Integer userId,
+                             @RequestParam(value = "p",defaultValue = "1") Integer page) {
+        Map<String, Object> result = new HashMap<>();
+
+        Pageable pageable = PageRequest.of(page-1, CommonConstants.DEFAULT_PAGE_SIZE);
+        Page<InfoNews> newsPage = newsService.findNewsByUserId(userId, pageable);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("news_list", newsPage.getContent());
+        data.put("total_page", newsPage.getTotalPages());
+        data.put("current_page", page);
+
+        result.put("errno", ResultEnum.OK.getCode());
+        result.put("errmsg", ResultEnum.OK.getMsg());
+        result.put("data", data);
+        return result;
     }
 }
