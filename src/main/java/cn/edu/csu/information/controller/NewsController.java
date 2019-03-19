@@ -40,7 +40,7 @@ public class NewsController {
 
     @PostMapping(value = "/followed_user")
     @ResponseBody
-    public Map<String, Object> followedUser(@RequestBody Map<String, Object> map,HttpServletRequest request){
+    public Map<String, Object> followedUser(@RequestBody Map<String, Object> map,  HttpServletRequest request){
         InfoUser user = SessionUtil.getUser(request, userService);
         if (user == null){
             return sessionErr();
@@ -80,6 +80,7 @@ public class NewsController {
             userService.deleteFansById(userFansMultiKey);
         }
 
+
         return okMsg();
     }
 
@@ -115,16 +116,71 @@ public class NewsController {
         comment.setNewsId(newsId);
         comment.setUserId(user.getId());
         comment.setContent(comment_content);
+        comment.setCreateTime(new Date());
         if(parentIdstr != null){
             parentId = Integer.parseInt(parentIdstr);
             comment.setParentId(parentId);
         }
 
         commentService.saveComment(comment);
+        CommentDetailDto commentDetailDto = getCommentDic(comment);
+
+        Map<String,Object> jsonBag = new HashMap<>();
+        jsonBag.put("errmsg",ResultEnum.OK.getMsg());
+        jsonBag.put("errno",ResultEnum.OK.getCode());
+        jsonBag.put("data",commentDetailDto);
+
+        return jsonBag;
+
+    }
+
+    @PostMapping(value = "/comment_like")
+    @ResponseBody
+    public Map<String, Object> commentLike(@RequestBody Map<String, Object> map,  HttpServletRequest request) {
+        InfoUser user = SessionUtil.getUser(request, userService);
+        if (user == null){
+            return sessionErr();
+        }
+
+        String commentIdStr = (String)map.get("comment_id");
+
+        Integer commentId = null;
+        if(commentIdStr != null){
+            commentId = Integer.parseInt(commentIdStr);
+        }
+        String action = (String) map.get("action");
+
+        if(commentId == null || action == null || !(action.equals("add") || action.equals("remove"))){
+            return paramErr();
+        }
+
+        InfoComment commentIns = null;
+        Optional<InfoComment> comment = commentService.findCommentByCommentId(commentId);
+        if(!comment.isPresent()){
+            return noDataErr();
+        }else{
+            commentIns = comment.get();
+        }
+
+        InfoCommentLike commentLikeIns = null;
+        Optional<InfoCommentLike> commentLike = commentService.findCommentLikeByUserIdAndCommentId(user.getId(), commentId);
+        if(action.equals("add")){
+            if(!commentLike.isPresent()){
+                commentLikeIns = new InfoCommentLike();
+                commentLikeIns.setUserId(user.getId());
+                commentLikeIns.setCommentId(commentId);
+                commentLikeIns.setCreateTime(new Date());
+                commentLikeIns.setUpdateTime(new Date());
+
+                commentIns.setLikeCount(commentIns.getLikeCount()+1);
+            }
+        }else{
+            if(commentLike.isPresent()){
+
+            }
+        }
 
         return okMsg();
-
-
     }
 
     @PostMapping(value = "/news_collect")
@@ -223,13 +279,11 @@ public class NewsController {
         newsShowDto.setCreateTimeStr(DateUtil.formatDate2(newsShowDto.getCreateTime()));
         newsShowDto.setCategory(categoryService.findCategoryById(infoNews.getCategoryId()));
 
-//        System.out.println(newsShowDto);
         model.addAttribute("news", newsShowDto);
         model.addAttribute("is_collected", isCollected);
         model.addAttribute("is_followed", isFollowed);
         model.addAttribute("comments", commentDictLi);
 
-//        System.out.println(infoNews);
         return "news/detail";
     }
 
@@ -303,8 +357,13 @@ public class NewsController {
         for (InfoComment infoComment : infoComments) {
             CommentDetailDto commentDetailDto = new CommentDetailDto();
             BeanUtils.copyProperties(infoComment, commentDetailDto);
-            commentDetailDto.setCreateTimeStr(
-                    DateUtil.formatDate2(commentDetailDto.getCreateTime()));
+            if(commentDetailDto.getCreateTime() != null) {
+                commentDetailDto.setCreateTimeStr(
+                        DateUtil.formatDate2(commentDetailDto.getCreateTime()));
+            }else{
+                commentDetailDto.setCreateTimeStr(
+                        DateUtil.formatDate2(new Date()));
+            }
             commentDetailDto.setLiked(false);
 
             for (Integer commentLikeIds : infoCommentLikeIds) {
@@ -323,6 +382,17 @@ public class NewsController {
             commentDictLi.add(commentDetailDto);
         }
         return commentDictLi;
+    }
+
+    private CommentDetailDto getCommentDic(InfoComment comment){
+        CommentDetailDto commentDetail = new CommentDetailDto();
+        BeanUtils.copyProperties(comment, commentDetail);
+        commentDetail.setCreateTimeStr(
+                DateUtil.formatDate2(commentDetail.getCreateTime()));
+        commentDetail.setLikeCount(commentService.countLikeByComentId(commentDetail.getId()));
+        commentDetail.setLiked(false);
+        commentDetail.setUser(userService.findUserById(commentDetail.getUserId()));
+        return  commentDetail;
     }
 
 }

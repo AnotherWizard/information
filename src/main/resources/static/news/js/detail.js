@@ -103,19 +103,19 @@ $(function(){
                     var comment_html = ''
                     comment_html += '<div class="comment_list">'
                     comment_html += '<div class="person_pic fl">'
-                    if (comment.user.avatar_url) {
-                        comment_html += '<img src="' + comment.user.avatar_url + '" alt="用户图标">'
+                    if (comment.user.avatarUrl) {
+                        comment_html += '<img src="' + comment.user.avatarUrl + '" alt="用户图标">'
                     }else {
                         comment_html += '<img src="../../static/news/images/person01.png" alt="用户图标">'
                     }
                     comment_html += '</div>'
-                    comment_html += '<div class="user_name fl">' + comment.user.nick_name + '</div>'
+                    comment_html += '<div class="user_name fl">' + comment.user.nickName + '</div>'
                     comment_html += '<div class="comment_text fl">'
                     comment_html += comment.content
                     comment_html += '</div>'
-                    comment_html += '<div class="comment_time fl">' + comment.create_time + '</div>'
+                    comment_html += '<div class="comment_time fl">' + comment.createTime + '</div>'
 
-                    comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-newsid="' + comment.news_id + '">赞</a>'
+                    comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-newsid="' + comment.newsId + '">赞</a>'
                     comment_html += '<a href="javascript:;" class="comment_reply fr">回复</a>'
                     comment_html += '<form class="reply_form fl" data-commentid="' + comment.id + '" data-newsid="' + news_id + '">'
                     comment_html += '<textarea class="reply_input"></textarea>'
@@ -237,30 +237,32 @@ $(function(){
                 data: JSON.stringify(params),
                 success: function (resp) {
                     if (resp.errno == "0") {
-                        var comment = resp.data
-                        // 拼接内容
+                        var comment = resp.data;
+                        // console.error(comment);
+                        拼接内容
+                        console.info(comment)
                         var comment_html = ""
                         comment_html += '<div class="comment_list">'
                         comment_html += '<div class="person_pic fl">'
-                        if (comment.user.avatar_url) {
-                            comment_html += '<img src="' + comment.user.avatar_url + '" alt="用户图标">'
+                        if (comment.user.avatarUrl) {
+                            comment_html += '<img src="' + comment.user.avatarUrl + '" alt="用户图标">'
                         }else {
                             comment_html += '<img src="../../static/news/images/person01.png" alt="用户图标">'
                         }
                         comment_html += '</div>'
-                        comment_html += '<div class="user_name fl">' + comment.user.nick_name + '</div>'
+                        comment_html += '<div class="user_name fl">' + comment.user.nickName + '</div>'
                         comment_html += '<div class="comment_text fl">'
                         comment_html += comment.content
                         comment_html += '</div>'
                         comment_html += '<div class="reply_text_con fl">'
-                        comment_html += '<div class="user_name2">' + comment.parent.user.nick_name + '</div>'
+                        comment_html += '<div class="user_name2">' + comment.parent.user.nickName + '</div>'
                         comment_html += '<div class="reply_text">'
                         comment_html += comment.parent.content
                         comment_html += '</div>'
                         comment_html += '</div>'
-                        comment_html += '<div class="comment_time fl">' + comment.create_time + '</div>'
+                        comment_html += '<div class="comment_time fl">' + comment.createTimeStr + '</div>'
 
-                        comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-newsid="' + comment.news_id + '">赞</a>'
+                        comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-newsid="' + comment.newsId + '">赞</a>'
                         comment_html += '<a href="javascript:;" class="comment_reply fr">回复</a>'
                         comment_html += '<form class="reply_form fl" data-commentid="' + comment.id + '" data-newsid="' + news_id + '">'
                         comment_html += '<textarea class="reply_input"></textarea>'

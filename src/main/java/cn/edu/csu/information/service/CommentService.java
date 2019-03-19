@@ -16,4 +16,9 @@ public interface CommentService {
     Optional<InfoComment> findCommentByCommentId(Integer commentId);
 
     InfoComment saveComment(InfoComment infoComment);
+
+    Integer countLikeByComentId(Integer commentId);
+
+    Optional<InfoCommentLike> findCommentLikeByUserIdAndCommentId(Integer userId, Integer commentId);
+
 }

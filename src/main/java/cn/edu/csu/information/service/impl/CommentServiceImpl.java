@@ -44,5 +44,15 @@ public class CommentServiceImpl implements CommentService {
     public InfoComment saveComment(InfoComment infoComment) {
         return infoCommentRepository.save(infoComment);
     }
+
+    @Override
+    public Integer countLikeByComentId(Integer commentId) {
+        return infoCommentLikeRepository.countByCommentId(commentId);
+    }
+
+    @Override
+    public Optional<InfoCommentLike> findCommentLikeByUserIdAndCommentId(Integer userId, Integer commentId) {
+        return infoCommentLikeRepository.findByUserIdAndCommentId(userId, commentId);
+    }
 }
 
