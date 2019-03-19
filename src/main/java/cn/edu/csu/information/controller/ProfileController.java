@@ -63,14 +63,6 @@ public class ProfileController {
         return "news/user";
     }
 
-//    @GetMapping("/pass_info")
-//    public String UserPassInfo(HttpServletRequest request,Model model){
-//        InfoUser user = SessionUtil.getUser(request, userService);
-//        model.addAttribute("user", user);
-//        return "news/user_pass_info";
-//    }
-
-
     @GetMapping("/pass_info")
     public String passInfo() {
         return "news/user_pass_info";
