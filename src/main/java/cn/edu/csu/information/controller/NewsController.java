@@ -66,18 +66,18 @@ public class NewsController {
         boolean isFollowed = false;
 
         if(action.equals("follow")){
-            List<InfoUserFans> userFolloweds = userService.findUserFansByFollowerId(userId);
-            for(InfoUserFans userFollowed : userFolloweds){
-                if(userFollowed.getFollowedId().equals(other.getId())){
+            List<InfoUserFans> userFollowers = userService.findUserFansByFollowedId(userId);
+            for(InfoUserFans userFollowed : userFollowers){
+                if(userFollowed.getFollowedId().equals(user.getId())){
                     isFollowed = true;
                 }
             }
             if(!isFollowed){
-                InfoUserFans userFans = new InfoUserFans(userId,other.getId());
+                InfoUserFans userFans = new InfoUserFans(user.getId(),userId);
                 userService.saveUserFans(userFans);
             }
         }else{
-            InfoUserFansMultiKey userFansMultiKey = new InfoUserFansMultiKey(userId, other.getId());
+            InfoUserFansMultiKey userFansMultiKey = new InfoUserFansMultiKey(user.getId(), userId);
             userService.deleteFansById(userFansMultiKey);
         }
 
