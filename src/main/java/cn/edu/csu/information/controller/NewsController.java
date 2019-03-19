@@ -2,6 +2,7 @@ package cn.edu.csu.information.controller;
 
 import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.*;
+import cn.edu.csu.information.dataObject.multiKeys.InfoCommentLikeMultiKey;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserFansMultiKey;
 import cn.edu.csu.information.dto.CommentDetailDto;
@@ -173,10 +174,16 @@ public class NewsController {
                 commentLikeIns.setUpdateTime(new Date());
 
                 commentIns.setLikeCount(commentIns.getLikeCount()+1);
+
+                commentService.saveCommentLike(commentLikeIns);
+                commentService.saveComment(commentIns);
             }
         }else{
             if(commentLike.isPresent()){
-
+                InfoCommentLikeMultiKey commentLikeMultiKey = new InfoCommentLikeMultiKey(user.getId(), commentId);
+                commentService.deleteCommentLikeById(commentLikeMultiKey);
+                commentIns.setLikeCount(commentIns.getLikeCount()-1);
+                commentService.saveComment(commentIns);
             }
         }
 
@@ -254,7 +261,7 @@ public class NewsController {
 
         Boolean isFollowed = false;
         if (infoNews.getUserId() != null && infoUser != null) {
-            isFollowed = ifFollowed(infoNews, infoUser);
+            isFollowed = ifFollow(infoNews, infoUser);
         }
 
         if (infoUser != null) {
@@ -326,7 +333,7 @@ public class NewsController {
         return CommonConstants.NOT_COLLECTED;
     }
 
-    private Boolean ifFollowed(InfoNews infoNews, InfoUser infoUser) {
+    private Boolean ifFollow(InfoNews infoNews, InfoUser infoUser) {
         List<InfoUserFans> infoUserFansList = userService.findUserFansByFollowerId(infoUser.getId());
         for (InfoUserFans infoUserFans : infoUserFansList) {
             if (infoUserFans.getFollowedId().equals(infoNews.getUserId())) {

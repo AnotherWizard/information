@@ -14,4 +14,6 @@ public interface InfoCommentRepository extends JpaRepository<InfoComment,Integer
 
     @Override
     <S extends InfoComment> S save(S s);
+
+
 }

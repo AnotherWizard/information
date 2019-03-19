@@ -20,4 +20,7 @@ public interface InfoCommentLikeRepository extends JpaRepository<InfoCommentLike
 
     @Override
     void deleteById(InfoCommentLikeMultiKey infoCommentLikeMultiKey);
+
+    @Override
+    <S extends InfoCommentLike> S save(S s);
 }

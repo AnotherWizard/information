@@ -2,6 +2,7 @@ package cn.edu.csu.information.service;
 
 import cn.edu.csu.information.dataObject.InfoComment;
 import cn.edu.csu.information.dataObject.InfoCommentLike;
+import cn.edu.csu.information.dataObject.multiKeys.InfoCommentLikeMultiKey;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,5 +21,9 @@ public interface CommentService {
     Integer countLikeByComentId(Integer commentId);
 
     Optional<InfoCommentLike> findCommentLikeByUserIdAndCommentId(Integer userId, Integer commentId);
+
+    void deleteCommentLikeById(InfoCommentLikeMultiKey infoCommentLikeMultiKey);
+
+    InfoCommentLike saveCommentLike(InfoCommentLike commentLike);
 
 }

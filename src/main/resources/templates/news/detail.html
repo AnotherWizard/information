@@ -92,18 +92,22 @@
                 <a th:case="true" href="javascript:;" class="comment_up has_comment_up fr"
                    th:data-commentid="${comment.id}"
                    th:data-likecount="${comment.likeCount}"
-                   th:data-newsid="${comment.newsId}"
-                   th:switch="${comment.likeCount gt 0}">
-                    <br th:case="true" th:text="${comment.likeCount}">
-                    <br th:case="false" th:text="赞">
+                   th:data-newsid="${comment.newsId}">
+                   <!--th:switch="${comment.likeCount ne 0}">-->
+                    <span th:switch="${comment.likeCount ne 0}">
+                    <span th:case="true" th:text="${comment.likeCount}"></span>
+                    <span th:case="false" th:text="赞"></span>
+                    </span>
                 </a>
                 <a th:case="false" href="javascript:;" class="comment_up fr"
                    th:data-commentid="${comment.id}"
                    th:data-likecount="${comment.likeCount}"
-                   th:data-newsid="${comment.newsId}"
-                   th:switch="${comment.likeCount gt 0}">
-                    <br th:case="true" th:text="${comment.likeCount}">
-                    <br th:case="false" th:text="赞">
+                   th:data-newsid="${comment.newsId}">
+                   <!--th:switch="${comment.likeCount ne 0}">-->
+                    <span th:switch="${comment.likeCount ne 0}">
+                    <span th:case="true" th:text="${comment.likeCount}"></span>
+                    <span th:case="false" th:text="赞"></span>
+                    </span>
                 </a>
                 <a href="javascript:;" class="comment_reply fr">回复</a>
                 <form class="reply_form fl" th:data-commentid="${comment.id}" th:data-newsid="${news.id}">

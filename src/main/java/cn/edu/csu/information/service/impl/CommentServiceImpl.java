@@ -4,6 +4,7 @@ import cn.edu.csu.information.dao.InfoCommentLikeRepository;
 import cn.edu.csu.information.dao.InfoCommentRepository;
 import cn.edu.csu.information.dataObject.InfoComment;
 import cn.edu.csu.information.dataObject.InfoCommentLike;
+import cn.edu.csu.information.dataObject.multiKeys.InfoCommentLikeMultiKey;
 import cn.edu.csu.information.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,17 @@ public class CommentServiceImpl implements CommentService {
     public Optional<InfoCommentLike> findCommentLikeByUserIdAndCommentId(Integer userId, Integer commentId) {
         return infoCommentLikeRepository.findByUserIdAndCommentId(userId, commentId);
     }
+
+    @Override
+    public void deleteCommentLikeById(InfoCommentLikeMultiKey infoCommentLikeMultiKey) {
+        infoCommentLikeRepository.deleteById(infoCommentLikeMultiKey);
+    }
+
+    @Override
+    public InfoCommentLike saveCommentLike(InfoCommentLike commentLike) {
+        return infoCommentLikeRepository.save(commentLike);
+    }
+
+
 }
 
