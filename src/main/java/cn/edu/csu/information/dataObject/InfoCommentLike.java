@@ -1,14 +1,19 @@
 package cn.edu.csu.information.dataObject;
 
+import cn.edu.csu.information.dataObject.multiKeys.InfoCommentLikeMultiKey;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @DynamicUpdate
+@IdClass(InfoCommentLikeMultiKey.class)
+@Data
 public class InfoCommentLike implements Serializable {
 
     private Date createTime;
@@ -17,7 +22,7 @@ public class InfoCommentLike implements Serializable {
 
     @Id
     private Integer commentId;
-
+    @Id
     private Integer userId;
 
     private static final long serialVersionUID = 1L;
