@@ -112,7 +112,7 @@ public class ProfileController {
                            BindingResult bindingResult) throws IOException {
         Map<String, Object> result = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            result.put("errmsg", bindingResult.getFieldError().getDefaultMessage());
+            result.put("errmsg", ResultEnum.PARAMERR.getMsg());
             return result;
         }
 
