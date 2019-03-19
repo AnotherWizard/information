@@ -14,7 +14,7 @@
         <h3>新闻列表</h3>
         <ul class="article_list" th:each="news:${news_list}" >
             <li th:if="${news.status}==0">
-                <a th:href="@{/news/{id}(id=${news.id})}" th:text="${news.title}"></a>
+                <a th:href="@{/news/{id}(id=${news.id})}" th:text="${news.title} " target="_blank"></a>
                 <em class="pass">已通过</em><span th:text="${news.createTime}"></span>
             </li>
             <li th:if="${news.status}==1">

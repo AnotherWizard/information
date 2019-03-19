@@ -201,8 +201,10 @@ public class ProfileController {
     @PostMapping("/news_release")
     @ResponseBody
     public Map newsRelease(@Valid NewsForm form,
+                           HttpServletRequest request,
                            BindingResult bindingResult) throws IOException {
         Map<String, Object> result = new HashMap<>();
+        InfoUser user = SessionUtil.getUser(request, userService);
         if (bindingResult.hasErrors()) {
             result.put("errmsg", ResultEnum.PARAMERR.getMsg());
             return result;
@@ -216,6 +218,7 @@ public class ProfileController {
         news.setCreateTime(new Date());
         news.setSource(CommonConstants.DEFAULT_SOURCE);
         news.setStatus(CommonConstants.NEWS_NOT_REVIEW);
+        news.setUserId(user.getId());
 
         newsService.updateOrAddNews(news);
         result.put("errno", ResultEnum.OK.getCode());
