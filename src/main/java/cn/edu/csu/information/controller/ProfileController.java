@@ -5,6 +5,7 @@ import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dto.UserShowDto;
 import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.form.NewsForm;
 import cn.edu.csu.information.sal.ImageStorage;
@@ -27,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,16 +75,16 @@ public class ProfileController {
     public Map passInfo(@RequestBody Map map,
                         HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
-        String old_password= (String)map.get("old_password");
-        String new_password = (String)map.get("new_password");
-        InfoUser infoUser= SessionUtil.getUser(request,userService);
+        String old_password = (String) map.get("old_password");
+        String new_password = (String) map.get("new_password");
+        InfoUser infoUser = SessionUtil.getUser(request, userService);
 
         /**
          * 判断旧密码是否为空
          */
         if (StringUtils.isEmpty(old_password)) {
 //            model.addAttribute("errmsg", ResultEnum.PARAMERR.getMsg());
-            result.put("errno",ResultEnum.PARAMERR.getCode());
+            result.put("errno", ResultEnum.PARAMERR.getCode());
             result.put("errmsg", ResultEnum.PARAMERR.getMsg());
             return result;
         }
@@ -92,13 +92,12 @@ public class ProfileController {
         /**
          * 判断旧密码是否正确
          */
-        if(!DigestUtils.md5DigestAsHex(old_password.getBytes()).equals(infoUser.getPasswordHash())) {
+        if (!DigestUtils.md5DigestAsHex(old_password.getBytes()).equals(infoUser.getPasswordHash())) {
 //            model.addAttribute("errmsg", ResultEnum.PWDERR.getMsg());
-            result.put("errno",ResultEnum.PWDERR.getCode());
+            result.put("errno", ResultEnum.PWDERR.getCode());
             result.put("errmsg", ResultEnum.PWDERR.getMsg());
             return result;
-        }
-        else{
+        } else {
             infoUser.setPasswordHash(DigestUtils.md5DigestAsHex(new_password.getBytes()));
             userService.updatOrAddUser(infoUser);
         }
@@ -106,6 +105,7 @@ public class ProfileController {
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
+
     @GetMapping("/base_info")
     public String UserBaseInfo(HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
@@ -228,4 +228,17 @@ public class ProfileController {
         return "news/user_news_list";
     }
 
+    @RequestMapping("/user_follow")
+    public String userFollow(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                             HttpServletRequest request, Model model) {
+
+        InfoUser user = SessionUtil.getUser(request, userService);
+
+        List<UserShowDto> userShowDtoList = userService.findUserFollowed(user.getId());
+        model.addAttribute("userList",userShowDtoList );
+        model.addAttribute("total_page",1);
+        model.addAttribute("current_page", page);
+
+        return "news/user_follow";
+    }
 }
