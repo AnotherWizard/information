@@ -6,7 +6,6 @@ import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.enums.ResultEnum;
-import cn.edu.csu.information.enums.GenderEnum;
 import cn.edu.csu.information.form.NewsForm;
 import cn.edu.csu.information.sal.ImageStorage;
 import cn.edu.csu.information.service.CategoryService;
@@ -15,6 +14,9 @@ import cn.edu.csu.information.service.UserService;
 import cn.edu.csu.information.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +35,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-
 
 @Slf4j
 @Controller
@@ -64,10 +65,10 @@ public class ProfileController {
     }
 
     @GetMapping("/pass_info")
-    public String passInfo() {
+    public String passInfo(HttpServletRequest request) {
+
         return "news/user_pass_info";
     }
-
 
     @PostMapping("/pass_info")
     @ResponseBody
@@ -105,11 +106,8 @@ public class ProfileController {
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
-
-
-
     @GetMapping("/base_info")
-    public String UserBaseInfo(HttpServletRequest request,Model model){
+    public String UserBaseInfo(HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
         model.addAttribute("user", user);
         return "news/user_base_info";
@@ -117,15 +115,14 @@ public class ProfileController {
 
     @PostMapping("/base_info")
     @ResponseBody
-    public Map UserBaseInfo(@RequestBody Map<String, Object> map,HttpServletRequest request ){
+    public Map UserBaseInfo(@RequestBody Map<String, Object> map, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
 
-        String nickName = (String)map.get("nick_name");
-        String signature = (String)map.get("signature");
-        String gender =(String)map.get("gender");
+        String nickName = (String) map.get("nick_name");
+        String signature = (String) map.get("signature");
+        String gender = (String) map.get("gender");
 
-
-        InfoUser infoUser= SessionUtil.getUser(request,userService);
+        InfoUser infoUser = SessionUtil.getUser(request, userService);
 //            # 2. 校验参数
         if (!map.containsKey("signature")) {
             result.put("errmsg", ResultEnum.PARAMERR.getMsg());
@@ -150,8 +147,6 @@ public class ProfileController {
         return result;
 
     }
-
-
 
     @GetMapping("/pic_info")
     public String picInfo(HttpServletRequest request, Model model) {
@@ -217,4 +212,20 @@ public class ProfileController {
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
     }
+
+    @RequestMapping("/news_list")
+    public String newsList(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                           HttpServletRequest request, Model model) {
+
+        InfoUser user = SessionUtil.getUser(request, userService);
+        Pageable pageable = PageRequest.of(page - 1, CommonConstants.DEFAULT_PAGE_SIZE);
+
+        Page<InfoNews> newsPage = newsService.findNewsByUserId(user.getId(), pageable);
+        model.addAttribute("news_list", newsPage.getContent());
+        model.addAttribute("total_page", newsPage.getTotalPages());
+        model.addAttribute("current_page", page);
+
+        return "news/user_news_list";
+    }
+
 }
