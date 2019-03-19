@@ -213,6 +213,18 @@ public class ProfileController {
         return result;
     }
 
+    @RequestMapping("/collection")
+    public String collection(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                           HttpServletRequest request, Model model) {
+        InfoUser user = SessionUtil.getUser(request, userService);
+//        Pageable pageable = PageRequest.of(page - 1, CommonConstants.DEFAULT_PAGE_SIZE);
+        List<InfoNews> news = userService.findUserCollection(user.getId());
+        model.addAttribute("collection_list", news);
+//        model.addAttribute("total_page", newsPage.getTotalPages());
+//        model.addAttribute("current_page", page);
+        return "news/user_collection";
+    }
+
     @RequestMapping("/news_list")
     public String newsList(@RequestParam(value = "p", defaultValue = "1") Integer page,
                            HttpServletRequest request, Model model) {

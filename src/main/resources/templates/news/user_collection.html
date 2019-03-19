@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>用户中心</title>
@@ -12,27 +12,34 @@
 <body class="inframe_body">
     <div class="my_collect">
         <h3>我的收藏</h3>
-        <ul class="article_list">
-            {% for news in data.collections %}
-                <li><a href="/news/{{ news.id }}" target="_blank">{{ news.title }}</a><span>{{ news.create_time }}</span></li>
-            {% endfor %}
-{#            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>#}
+        <!--<ul class="article_list">-->
+            <!--{% for news in data.collections %}-->
+                <!--<li><a href="/news/{{ news.id }}" target="_blank">{{ news.title }}</a><span>{{ news.create_time }}</span></li>-->
+            <!--{% endfor %}-->
+<!--{#            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>#}-->
+        <!--</ul>-->
+
+        <ul class="article_list" th:each="news:${collection_list}" >
+            <li>
+                <a th:href="@{/news/{id}(id=${news.id})}" th:text="${news.title}"></a>
+                <span th:text="${news.createTime}"></span>
+            </li>
         </ul>
 
 
 
-        <div id="pagination" class="page"></div>
-        <script>
-            $(function() {
-                $("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
-                    callback: function(current) {
-                        location.href = "/user/collection?p=" + current
-                    }
-                });
-            });
-        </script>
+        <!--<div id="pagination" class="page"></div>-->
+        <!--<script>-->
+            <!--$(function() {-->
+                <!--$("#pagination").pagination({-->
+                    <!--currentPage: {{ data.current_page }},-->
+                    <!--totalPage: {{ data.total_page }},-->
+                    <!--callback: function(current) {-->
+                        <!--location.href = "/user/collection?p=" + current-->
+                    <!--}-->
+                <!--});-->
+            <!--});-->
+        <!--</script>-->
 
     </div>
 </body>

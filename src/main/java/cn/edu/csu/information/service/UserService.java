@@ -1,5 +1,6 @@
 package cn.edu.csu.information.service;
 
+import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dataObject.InfoUserCollection;
 import cn.edu.csu.information.dataObject.InfoUserFans;
@@ -68,6 +69,7 @@ public interface UserService {
     void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey);
 
 //    void deleteUserI
+    List<InfoNews> findUserCollection(Integer userId);
 
     List<UserShowDto> findUserFollowed(Integer userId);
 

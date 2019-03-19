@@ -1,9 +1,11 @@
 package cn.edu.csu.information.service.impl;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.dao.InfoNewsRepository;
 import cn.edu.csu.information.dao.InfoUserCollectionRepository;
 import cn.edu.csu.information.dao.InfoUserFansRepository;
 import cn.edu.csu.information.dao.InfoUserRepository;
+import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dataObject.InfoUserCollection;
 import cn.edu.csu.information.dataObject.InfoUserFans;
@@ -38,8 +40,11 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private NewsService newsService;
+    @Autowired
+    private InfoNewsRepository infoNewsRepository;
 
     @Override
+
     public InfoUser findUserById(Integer integer) {
         return infoUserRepository.findById(integer).get();
     }
@@ -129,5 +134,17 @@ public class UserServiceImpl implements UserService {
         });
 
         return userShowDtoList;
+    }
+
+    @Override
+    public List<InfoNews> findUserCollection(Integer userId) {
+        //得到collection表中的相关数据
+        List<InfoUserCollection> collectionList = infoUserCollectionRepository.findByUserId(userId);
+
+        List<Integer> newIdList = new ArrayList<>();
+        for (InfoUserCollection collection : collectionList) {
+            newIdList.add(collection.getNewsId());
+        }
+        return infoNewsRepository.findByIdIn(newIdList);
     }
 }
