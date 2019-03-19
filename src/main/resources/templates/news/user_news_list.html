@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>用户中心</title>
@@ -12,22 +12,22 @@
 <body class="inframe_body">
     <div class="news_list">
         <h3>新闻列表</h3>
-        <ul class="article_list">
-            {% for news in data.news_list %}
-            <li>
-            {% if news.status == 0 %}
-                {# 审核通过 #}
-                <a href="/news/{{ news.id }}">{{ news.title }}</a><em class="pass">已通过</em><span>{{ news.create_time }}</span>
-            {% elif news.status == 1 %}
-                {# 审核中 #}
-                <a href="javascript:;">{{ news.title }}</a><em class="review">审核中</em><span>{{ news.create_time }}</span>
-            {% else %}
-                {# 审核不通过 #}
-                <a href="javascript:;">{{ news.title }}</a><em class="nopass">未通过</em><span>{{ news.create_time }}</span>
-                <b>未通过原因：{{ news.reason }}</b>
-            {% endif %}
+        <ul class="article_list" th:each="news:${news_list}" >
+            <li th:if="${news.status}==0">
+                <a th:href="@{/news/{id}(id=${news.id})}" th:text="${news.title}"></a>
+                <em class="pass">已通过</em><span th:text="${news.createTime}"></span>
             </li>
-            {% endfor %}
+            <li th:if="${news.status}==1">
+                <a href="javascript:;" th:text="${news.title}"></a>
+                <em class="review">审核中</em><span th:text="${news.createTime}"></span>
+            </li>
+            <li th:if="${news.status}==-1">
+
+                <a href="javascript:;" th:text="${news.title}"></a>
+                <em class="review">未通过</em><span th:text="${news.createTime}"></span>
+                <b th:text="'未通过原因：'+${news.reason}"></b>
+            </li>
+
         </ul>
         <div id="pagination" class="page"></div>
         <script>
@@ -36,8 +36,8 @@
 
             $(function(){
                 $("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
+                    currentPage: [[${current_page}]],
+                    totalPage: [[${total_page}]],
                     callback: function(current) {
                         window.location.href = '/user/news_list?p=' + current
                     }

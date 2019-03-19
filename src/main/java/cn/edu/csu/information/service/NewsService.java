@@ -48,4 +48,6 @@ public interface NewsService {
 
     List<InfoNews> findNewsByUserId(Integer userId);
 
+    Page<InfoNews> findNewsByUserId(Integer userId,Pageable pageable);
+
 }

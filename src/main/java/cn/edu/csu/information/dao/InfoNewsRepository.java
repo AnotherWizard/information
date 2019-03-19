@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,4 +46,12 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
     Optional<InfoNews> findById(Integer integer);
 
     List<InfoNews> findByUserId(Integer userId);
+
+    /**
+     * 分页接口
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    Page<InfoNews> findByUserId(Integer userId,Pageable pageable);
 }
