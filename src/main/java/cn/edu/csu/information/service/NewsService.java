@@ -42,7 +42,7 @@ public interface NewsService {
 
     List<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status);
 
-    InfoNews updateNews(InfoNews infoNews);
+    InfoNews updateOrAddNews(InfoNews infoNews);
 
     Optional<InfoNews> findById(Integer integer);
 

@@ -19,4 +19,10 @@ public interface CommonConstants {
     String COOKIE_TOKEN = "token";
     String TOKEN_PREFIX = "token_";
     Integer TOKEN_EXPIRE = 7200;
+
+    String DEFAULT_SOURCE="个人发布";
+
+    Integer NEWS_NOT_REVIEW=1;
+
+
 }

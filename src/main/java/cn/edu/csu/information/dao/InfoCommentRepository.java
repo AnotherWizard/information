@@ -12,5 +12,6 @@ public interface InfoCommentRepository extends JpaRepository<InfoComment,Integer
 
     List<InfoComment> findByNewsId(Integer newsId);
 
-
+    @Override
+    <S extends InfoComment> S save(S s);
 }

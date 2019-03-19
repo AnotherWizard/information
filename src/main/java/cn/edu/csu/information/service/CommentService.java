@@ -14,4 +14,6 @@ public interface CommentService {
     List<InfoComment> findCommentByNewsId(Integer newsId);
 
     Optional<InfoComment> findCommentByCommentId(Integer commentId);
+
+    InfoComment saveComment(InfoComment infoComment);
 }

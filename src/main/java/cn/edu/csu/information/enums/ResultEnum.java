@@ -33,6 +33,7 @@ public enum ResultEnum {
     CODEERR(205,"验证码错误"),
     NO_USER(206,"用户不存在"),
     PWDERR(207,"用户名或密码错误"),
+    SESSIONERR(4101,"用户未登录")
     ;
     private Integer code;
     private String msg;

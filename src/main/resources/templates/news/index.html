@@ -21,12 +21,11 @@
         </ul>
         <!-- 用户登录后显示下面，隐藏上面 -->
         <div class="user_login fr" th:case="true">
-            <span th:switch="${user.avatarUrl ne null}"/>
-            <img th:case="true" th:src="${user.avatarUrl}" class="lgin_pic">
-            <img th:case="false" th:src="../../static/news/images/person01.png" class ="lgin_pic">
-            </span>
+            <img th:src="${user?.avatarUrl==null} ? '../../static/news/images/person01.png' :${user.avatarUrl}"
+                 alt="用户图片"
+            >
 
-            <a href="/user/info" id="nick_name" th:text="${user.nickName}">{{ data.user.nick_name }}</a>
+            <a href="/user/info" id="nick_name" th:text="${user.nickName}"></a>
             <a href="javascript:;" onclick="logout()">退出</a>
         </div>
         <div class="user_btns fr" th:case="false">

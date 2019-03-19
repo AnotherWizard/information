@@ -1,10 +1,11 @@
 package cn.edu.csu.information.dataObject;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
-import lombok.Data;
-
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +20,7 @@ public class InfoNews implements Serializable {
     private Date updateTime = new Date();
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String title;
@@ -27,7 +29,7 @@ public class InfoNews implements Serializable {
 
     private String digest;
 
-    private Integer clicks;
+    private Integer clicks=0;
 
     private String indexImageUrl;
 

@@ -7,6 +7,8 @@ import cn.edu.csu.information.dao.InfoUserRepository;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dataObject.InfoUserCollection;
 import cn.edu.csu.information.dataObject.InfoUserFans;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
+import cn.edu.csu.information.dataObject.multiKeys.InfoUserFansMultiKey;
 import cn.edu.csu.information.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,5 +76,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public InfoUser updatOrAddUser(InfoUser infoUser) {
         return infoUserRepository.save(infoUser);
+    }
+
+    @Override
+    public void deleteUserCollectionById(InfoUserCollectionMultiKey infoUserCollectionMultiKey) {
+         infoUserCollectionRepository.deleteById(infoUserCollectionMultiKey);
+    }
+
+    @Override
+    public InfoUserCollection saveUserCollection(InfoUserCollection userCollection) {
+        return infoUserCollectionRepository.saveAndFlush(userCollection);
+    }
+
+    @Override
+    public InfoUserFans saveUserFans(InfoUserFans infoUserFans) {
+        return infoUserFansRepository.save(infoUserFans);
+    }
+
+    @Override
+    public void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey) {
+        infoUserFansRepository.deleteById(infoUserFansMultiKey);
     }
 }
