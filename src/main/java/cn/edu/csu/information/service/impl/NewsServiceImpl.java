@@ -30,8 +30,7 @@ public class NewsServiceImpl implements NewsService {
         return infoNewsRepository.findAll(sort);
     }
 
-
-   @Override
+    @Override
     public Page<InfoNews> findNewsAllByOrderByCreateTimeDesc(Pageable pageable) {
         return infoNewsRepository.findAllByOrderByCreateTimeDesc(pageable);
     }
@@ -43,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public Page<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status, Pageable pageable) {
-        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status ,pageable);
+        return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status, pageable);
     }
 
     @Override
@@ -55,7 +54,6 @@ public class NewsServiceImpl implements NewsService {
     public List<InfoNews> findNewsByStatusOrderByCreateTimeDesc(Integer status) {
         return infoNewsRepository.findByStatusOrderByCreateTimeDesc(status);
     }
-
 
     @Override
     public List<InfoNews> findNewsByStatus(Integer status) {
@@ -92,5 +90,11 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<InfoNews> findNewsByUserId(Integer userId) {
         return infoNewsRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Page<InfoNews> findNewsByUserId(Integer userId, Pageable pageable) {
+
+        return infoNewsRepository.findByUserId(userId, pageable);
     }
 }

@@ -29,7 +29,7 @@ public class InfoNews implements Serializable {
 
     private String digest;
 
-    private Integer clicks;
+    private Integer clicks=0;
 
     private String indexImageUrl;
 

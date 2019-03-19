@@ -42,4 +42,5 @@ public enum ResultEnum {
         this.code = code;
         this.msg = msg;
     }
+
 }
