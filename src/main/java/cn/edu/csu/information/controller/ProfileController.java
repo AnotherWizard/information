@@ -64,59 +64,48 @@ public class ProfileController {
         return "news/user";
     }
 
-//    @GetMapping("/pass_info")
-//    public String UserPassInfo(HttpServletRequest request,Model model){
-//        InfoUser user = SessionUtil.getUser(request, userService);
-//        model.addAttribute("user", user);
-//        return "news/user_pass_info";
-//    }
-
     @GetMapping("/pass_info")
     public String passInfo(HttpServletRequest request) {
 
-//        if (userId != null && isAdmin != null) {
-//            return "redirect:/admin/index";
-//        }
         return "news/user_pass_info";
     }
 
     @PostMapping("/pass_info")
     @ResponseBody
-    public Map passInfo(@RequestParam(value = "old_password") String password, @RequestParam(value = "password") String new_password,
-                        HttpServletRequest request, HttpServletResponse response) {
-
+    public Map passInfo(@RequestBody Map map,
+                        HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
+        String old_password= (String)map.get("old_password");
+        String new_password = (String)map.get("new_password");
+        InfoUser infoUser= SessionUtil.getUser(request,userService);
 
-        InfoUser infoUser = SessionUtil.getUser(request, userService);
-//        InfoUser user = userService.findUserByMobile(username);
-
-        if (StringUtils.isEmpty(password)) {
+        /**
+         * 判断旧密码是否为空
+         */
+        if (StringUtils.isEmpty(old_password)) {
 //            model.addAttribute("errmsg", ResultEnum.PARAMERR.getMsg());
-            result.put("errno", ResultEnum.PARAMERR.getCode());
+            result.put("errno",ResultEnum.PARAMERR.getCode());
             result.put("errmsg", ResultEnum.PARAMERR.getMsg());
             return result;
         }
-//        if (infoUser == null || !infoUser.getIsAdmin()) {
-//            model.addAttribute("errmsg", ResultEnum.NO_USER.getMsg());
-//            return "admin/login";
-//        }
 
-        if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(infoUser.getPasswordHash())) {
+        /**
+         * 判断旧密码是否正确
+         */
+        if(!DigestUtils.md5DigestAsHex(old_password.getBytes()).equals(infoUser.getPasswordHash())) {
 //            model.addAttribute("errmsg", ResultEnum.PWDERR.getMsg());
-            result.put("errno", ResultEnum.PWDERR.getCode());
+            result.put("errno",ResultEnum.PWDERR.getCode());
             result.put("errmsg", ResultEnum.PWDERR.getMsg());
             return result;
-        } else {
-            infoUser.setPasswordHash(new_password);
+        }
+        else{
+            infoUser.setPasswordHash(DigestUtils.md5DigestAsHex(new_password.getBytes()));
             userService.updatOrAddUser(infoUser);
-
         }
         result.put("errno", ResultEnum.OK.getCode());
         result.put("errmsg", ResultEnum.OK.getMsg());
         return result;
-
     }
-
     @GetMapping("/base_info")
     public String UserBaseInfo(HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
