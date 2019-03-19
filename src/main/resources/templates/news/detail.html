@@ -22,7 +22,7 @@
             <img th:case="false" th:src="../../static/news/images/person01.png" class ="lgin_pic">
             </span>
 
-            <a href="/user/info" id="nick_name" th:text="${user.nickName}">{{ data.user.nick_name }}</a>
+            <a href="/user/info" id="nick_name" th:text="${user.nickName}"></a>
             <a href="javascript:;" onclick="logout()">退出</a>
         </div>
         <div class="user_btns fr" th:case="false">
@@ -133,7 +133,10 @@
                 <img th:case="false" src="../../static/news/images/user_pic.png" alt="author_pic">
             </a>
             <a href="#" class="author_name" th:text="${news.author.nickName}"></a>
-            <div class="author_resume" th:text="'签名: '+ ${news.author.signature}"></div>
+            <span th:switch="${news.author.signature eq null}">
+            <div th:if="false" class="author_resume" th:text="'签名: '+ ${news.author.signature}"></div>
+            <div th:if="true" class="author_resume" th:text="'签名: '+ '这家伙很懒，什么都没写'"></div>
+            </span>
             <div class="writings"><span>总篇数</span><b th:text="${news.author.newsCount}"></b></div>
             <div class="follows"><span>粉丝</span><b th:text="${news.author.followersCount}"></b></div>
             <a href="javascript:;" class="focus fr" th:data-userid="${news.author.id}"  th:style="${is_followed}?'display:none':'display:block'">关注</a>
