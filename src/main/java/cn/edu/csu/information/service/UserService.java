@@ -1,8 +1,12 @@
 package cn.edu.csu.information.service;
 
-import cn.edu.csu.information.dataObject.*;
+import cn.edu.csu.information.dataObject.InfoNews;
+import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dataObject.InfoUserCollection;
+import cn.edu.csu.information.dataObject.InfoUserFans;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserCollectionMultiKey;
 import cn.edu.csu.information.dataObject.multiKeys.InfoUserFansMultiKey;
+import cn.edu.csu.information.dto.UserShowDto;
 
 import java.util.Date;
 import java.util.List;
@@ -65,6 +69,11 @@ public interface UserService {
     void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey);
 
 //    void deleteUserI
+    List<InfoNews> findUserCollection(Integer userId);
+
+    List<UserShowDto> findUserFollowed(Integer userId);
+
+
 
 
 }

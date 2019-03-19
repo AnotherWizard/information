@@ -54,4 +54,6 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
      * @return
      */
     Page<InfoNews> findByUserId(Integer userId,Pageable pageable);
+
+    List<InfoNews> findByIdIn(List<Integer> idList);
 }

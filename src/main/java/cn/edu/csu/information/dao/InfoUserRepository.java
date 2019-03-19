@@ -47,5 +47,9 @@ public interface InfoUserRepository  extends JpaRepository<InfoUser,Integer> {
      */
     List<InfoUser> findByIsAdminAndCreateTimeAfter(Boolean isAdmin,Date startTime);
 
+    List<InfoUser> findByIdIn(List<Integer> infouserIdList);
+
+
+
 
 }

@@ -27,15 +27,15 @@ public class UserInterceptor implements HandlerInterceptor {
         Cookie cookie = CookieUtil.get(request, CommonConstants.COOKIE_TOKEN);
         if (cookie == null) {
             log.info("未登录");
-//            response.sendRedirect("/");
-            return true;
+            response.sendRedirect("/");
+            return false;
         }
 
         String token = redisTemplate.opsForValue().get(String.format("%s%s",CommonConstants.TOKEN_PREFIX,cookie.getValue()));
         if (StringUtils.isEmpty(token)){
             log.info("登录过期");
-//            response.sendRedirect("/");
-            return true;
+            response.sendRedirect("/");
+            return false;
         }
 
 

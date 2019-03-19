@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>用户中心</title>
@@ -12,21 +12,19 @@
 </head>
 <body class="inframe_body">
         <h3 class="common_title">我的关注</h3>
-        <ul class="card_list_con">
-        {% for user in data.users %}
+        <ul class="card_list_con" th:each="user:${userList}">
+
             <li class="author_card card_list">
-                <a href="{{ url_for("profile.other_info") }}?user_id={{ user.id }}" target="_blank" class="author_pic"><img src="{% if user.avatar_url %}
-                {{ user.avatar_url }}
-                {% else %}
-                ../../static/news/images/user_pic.png
-                {% endif %}" alt="author_pic"></a>
-                <a href="{{ url_for("profile.other_info") }}?user_id={{ user.id }}" target="_blank" class="author_name">{{ user.nick_name }}</a>
-                <div class="author_resume">{{ user.signature }}</div>
-                <div class="writings"><span>总篇数</span><b>{{ user.news_count }}</b></div>
-                <div class="follows"><span>粉丝</span><b>{{ user.followers_count }}</b></div>
-                <a href="javascript:;" class="focused fr" data-userid="{{ user.id }}"><span class="out">已关注</span><span class="over">取消关注</span></a>
+                <a th:href="@{/user/other_info/(user_id=${user.id})}" target="_blank" class="author_pic">
+                    <img th:src="${user?.avatarUrl==null} ? '../../static/news/images/user_pic.png' :${user.avatarUrl}" alt="author_pic">
+                </a>
+
+                <a th:href="@{/user/other_info/(user_id=${user.id})}" target="_blank" class="author_name" th:text="${user.nickName}"></a>
+                <div class="author_resume" th:text="${user.signature}"></div>
+                <div class="writings"><span>总篇数</span><b th:text="${user.newsCount}"></b></div>
+                <div class="follows"><span>粉丝</span><b th:text="${user.followersCount}"></b></div>
+                <a href="javascript:;" class="focused fr" th:data-userid="${user.id}"><span class="out">已关注</span><span class="over">取消关注</span></a>
             </li>
-        {% endfor %}
         </ul>
         
         
@@ -34,8 +32,8 @@
         <script>
             $(function() {
                 $("#pagination").pagination({
-                    currentPage: {{ data.current_page }},
-                    totalPage: {{ data.total_page }},
+                    currentPage: [[${current_page}]] ,
+                    totalPage: [[${total_page}]],
                     callback: function(current) {
                         window.location = "/user/user_follow?p=" + current
                     }
