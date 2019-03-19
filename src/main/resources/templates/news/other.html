@@ -32,7 +32,7 @@
         </div>
     </div>
 </div>
-
+<div class="conter_con">
     <div class="user_menu_con fl">
         <div class="user_center_pic">
             <img th:src="${other?.avatarUrl==null} ? '../../static/news/images/user_pic.png' :${other.avatarUrl}" alt="用户图片">
@@ -54,6 +54,35 @@
         </div>
 
     </div>
+
+<div class="user_con fr">
+    <div class="other_collect">
+        <h3>他的文章</h3>
+        <ul class="article_list">
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        </ul>
+
+        <div id="pagination" class="page"></div>
+        <script>
+            $(function(){
+                $("#pagination").pagination({
+                    currentPage: 2,
+                    totalPage: 3,
+                    callback: function(current) {
+                        getNewsList(current)
+                    }
+                });
+            });
+        </script>
+    </div>
+
+</div>
+</div>
 <!--{% block bottomBlock %}-->
 <div class="footer">
     <div class="footer_links">
@@ -133,5 +162,7 @@
     </div>
     <div class="mask"></div>
 </form>
+
+
 </body>
 </html>

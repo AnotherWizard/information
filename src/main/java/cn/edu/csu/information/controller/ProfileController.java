@@ -5,6 +5,7 @@ import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dataObject.InfoCategory;
 import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
+import cn.edu.csu.information.dto.NewsBasicDto;
 import cn.edu.csu.information.dto.UserShowDto;
 import cn.edu.csu.information.enums.ResultEnum;
 import cn.edu.csu.information.form.NewsForm;
@@ -12,6 +13,7 @@ import cn.edu.csu.information.sal.ImageStorage;
 import cn.edu.csu.information.service.CategoryService;
 import cn.edu.csu.information.service.NewsService;
 import cn.edu.csu.information.service.UserService;
+import cn.edu.csu.information.utils.DateUtil;
 import cn.edu.csu.information.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -31,10 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -110,10 +109,10 @@ public class ProfileController {
     @RequestMapping("/other_info")
     public String other(@RequestParam(value = "user_id") Integer userId, HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
-        InfoUser other =userService.findUserById(userId);
+        InfoUser other = userService.findUserById(userId);
         model.addAttribute("other", other);
         model.addAttribute("user", user);
-        model.addAttribute("is_followed",Boolean.TRUE);
+        model.addAttribute("is_followed", Boolean.TRUE);
         return "news/other";
     }
 
@@ -268,14 +267,15 @@ public class ProfileController {
     @RequestMapping("/other_news_list")
     @ResponseBody
     public Map otherNewsList(@RequestParam(value = "user_id") Integer userId,
-                             @RequestParam(value = "p",defaultValue = "1") Integer page) {
+                             @RequestParam(value = "p", defaultValue = "1") Integer page) {
         Map<String, Object> result = new HashMap<>();
 
-        Pageable pageable = PageRequest.of(page-1, CommonConstants.DEFAULT_PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page - 1, CommonConstants.DEFAULT_PAGE_SIZE);
         Page<InfoNews> newsPage = newsService.findNewsByUserId(userId, pageable);
 
+
         Map<String, Object> data = new HashMap<>();
-        data.put("news_list", newsPage.getContent());
+        data.put("news_list", convert(newsPage.getContent()));
         data.put("total_page", newsPage.getTotalPages());
         data.put("current_page", page);
 
@@ -284,4 +284,19 @@ public class ProfileController {
         result.put("data", data);
         return result;
     }
+
+    private List<NewsBasicDto> convert(List<InfoNews> infoNewsList) {
+        List<NewsBasicDto> newsBasicDtoList = new ArrayList<>();
+        infoNewsList.forEach((infoNews) -> {
+            NewsBasicDto newsBasicDto = new NewsBasicDto();
+            BeanUtils.copyProperties(infoNews, newsBasicDto);
+            newsBasicDto.setCreateTimeStr(DateUtil.formatDate2(infoNews.getCreateTime()));
+            newsBasicDtoList.add(newsBasicDto);
+
+        });
+
+        return newsBasicDtoList;
+    }
 }
+
+

@@ -37,7 +37,7 @@ function getNewsList(page) {
             // 拼接数据
             for (var i = 0; i<resp.data.news_list.length; i++) {
                 var news = resp.data.news_list[i];
-                var html = '<li><a href="/news/'+ news.id +'" target="_blank">' + news.title + '</a><span>' + news.create_time + '</span></li>'
+                var html = '<li><a href="/news/'+ news.id +'" target="_blank">' + news.title + '</a><span>' + news.createTimeStr + '</span></li>'
                 // 添加数据
                 $(".article_list").append(html)
             }
