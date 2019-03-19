@@ -65,6 +65,7 @@ public interface UserService {
     void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey);
 
 //    void deleteUserI
+    List<InfoNews> findUserCollection(Integer userId);
 
 
 }

@@ -1,9 +1,11 @@
 package cn.edu.csu.information.service.impl;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.dao.InfoNewsRepository;
 import cn.edu.csu.information.dao.InfoUserCollectionRepository;
 import cn.edu.csu.information.dao.InfoUserFansRepository;
 import cn.edu.csu.information.dao.InfoUserRepository;
+import cn.edu.csu.information.dataObject.InfoNews;
 import cn.edu.csu.information.dataObject.InfoUser;
 import cn.edu.csu.information.dataObject.InfoUserCollection;
 import cn.edu.csu.information.dataObject.InfoUserFans;
@@ -13,6 +15,7 @@ import cn.edu.csu.information.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +33,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private InfoUserFansRepository infoUserFansRepository;
+
+    @Autowired
+    private InfoNewsRepository infoNewsRepository;
+
 
 
     @Override
@@ -96,5 +103,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteFansById(InfoUserFansMultiKey infoUserFansMultiKey) {
         infoUserFansRepository.deleteById(infoUserFansMultiKey);
+    }
+
+    @Override
+    public List<InfoNews> findUserCollection(Integer userId) {
+        //得到collection表中的相关数据
+        List<InfoUserCollection> collectionList=infoUserCollectionRepository.findByUserId(userId);
+
+        List<Integer> newIdList= new ArrayList<>();
+        for(InfoUserCollection collection:collectionList){
+           newIdList.add( collection.getNewsId());
+        }
+        return infoNewsRepository.findByIdIn(newIdList);
     }
 }
