@@ -106,6 +106,17 @@ public class ProfileController {
         return result;
     }
 
+
+    @RequestMapping("/other_info")
+    public String other(@RequestParam(value = "user_id") Integer userId, HttpServletRequest request, Model model) {
+        InfoUser user = SessionUtil.getUser(request, userService);
+        InfoUser other =userService.findUserById(userId);
+        model.addAttribute("other", other);
+        model.addAttribute("user", user);
+        model.addAttribute("is_followed",Boolean.TRUE);
+        return "news/other";
+    }
+
     @GetMapping("/base_info")
     public String UserBaseInfo(HttpServletRequest request, Model model) {
         InfoUser user = SessionUtil.getUser(request, userService);
