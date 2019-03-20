@@ -206,7 +206,8 @@ public class ProfileController {
         Map<String, Object> result = new HashMap<>();
         InfoUser user = SessionUtil.getUser(request, userService);
         if (bindingResult.hasErrors()) {
-            result.put("errmsg", ResultEnum.PARAMERR.getMsg());
+            result.put("errno", ResultEnum.PARAMERR.getCode());
+            result.put("errmsg", bindingResult.getFieldError().getDefaultMessage());
             return result;
         }
 

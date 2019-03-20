@@ -25,7 +25,11 @@ $(function () {
                 }else {
                     alert(resp.errmsg)
                 }
+            },
+            error:function () {
+                alert("参数错误")
             }
+
         })
 
         // // 选中索引为6的左边单菜单
