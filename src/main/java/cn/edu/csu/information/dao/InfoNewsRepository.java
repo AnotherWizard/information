@@ -65,4 +65,6 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
      * @return
      */
     Page<InfoNews> findByTitleLikeOrContentLikeOrderByCreateTimeDesc(String title,String content,Pageable pageable);
+
+    Page<InfoNews> findAllByOrderByClicksDesc(Pageable pageable);
 }

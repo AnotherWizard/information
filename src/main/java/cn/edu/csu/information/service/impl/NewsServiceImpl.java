@@ -1,6 +1,7 @@
 package cn.edu.csu.information.service.impl;
 
 import cn.edu.csu.information.constants.AdminConstants;
+import cn.edu.csu.information.constants.CommonConstants;
 import cn.edu.csu.information.dao.InfoCategoryRepository;
 import cn.edu.csu.information.dao.InfoNewsRepository;
 import cn.edu.csu.information.dataObject.InfoCategory;
@@ -9,6 +10,7 @@ import cn.edu.csu.information.dto.NewsDetailDto;
 import cn.edu.csu.information.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -99,9 +101,15 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<InfoNews> findNewsByKeywords(String title, String content,Pageable pageable) {
-        title="%"+title+"%";
-        content="%"+content+"%";
-        return infoNewsRepository.findByTitleLikeOrContentLikeOrderByCreateTimeDesc(title,content,pageable);
+    public Page<InfoNews> findNewsByKeywords(String title, String content, Pageable pageable) {
+        title = "%" + title + "%";
+        content = "%" + content + "%";
+        return infoNewsRepository.findByTitleLikeOrContentLikeOrderByCreateTimeDesc(title, content, pageable);
+    }
+
+    @Override
+    public List<InfoNews> findNewsClickTopTen() {
+
+        return infoNewsRepository.findAllByOrderByClicksDesc(PageRequest.of(CommonConstants.DEFAULT_PAGE, CommonConstants.DEFAULT_PAGE_SIZE)).getContent();
     }
 }

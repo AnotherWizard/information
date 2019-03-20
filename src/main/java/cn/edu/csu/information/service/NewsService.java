@@ -52,4 +52,6 @@ public interface NewsService {
 
     Page<InfoNews> findNewsByKeywords(String title,String content,Pageable pageable);
 
+    List<InfoNews> findNewsClickTopTen();
+
 }

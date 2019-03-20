@@ -20,9 +20,10 @@ public interface CommonConstants {
     String TOKEN_PREFIX = "token_";
     Integer TOKEN_EXPIRE = 7200;
 
-    String DEFAULT_SOURCE="个人发布";
+    String DEFAULT_SOURCE = "个人发布";
 
-    Integer NEWS_NOT_REVIEW=1;
+    Integer NEWS_NOT_REVIEW = 1;
 
+    Integer DEFAULT_PAGE = 0;
 
 }
