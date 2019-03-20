@@ -99,10 +99,9 @@ public class AdminController {
     }
 
     @RequestMapping("/index")
-    public String index(HttpServletRequest request,Model model) {
+    public String index(HttpServletRequest request, Model model) {
 
-
-        model.addAttribute("user", SessionUtil.getUser(request,userService));
+        model.addAttribute("user", SessionUtil.getUser(request, userService));
         return "admin/index";
     }
 
@@ -221,7 +220,12 @@ public class AdminController {
 
         PageRequest pageRequest = PageRequest.of(currentPage - 1, AdminConstants.DEFAULT_PAGE_SIZE);
 
-        Page<InfoNews> infoNewsPage = newsService.findNewsAllByOrderByCreateTimeDesc(pageRequest);
+        Page<InfoNews> infoNewsPage;
+        if (keywords != null) {
+            infoNewsPage = newsService.findNewsByKeywords(keywords, keywords, pageRequest);
+        } else {
+            infoNewsPage = newsService.findNewsAllByOrderByCreateTimeDesc(pageRequest);
+        }
 
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", infoNewsPage.getTotalPages());
@@ -309,12 +313,9 @@ public class AdminController {
         return result;
     }
 
-
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request,
-                      HttpServletResponse response) {
-
-
+                         HttpServletResponse response) {
 
         SessionUtil.removeSeesionAndToken(request, response, redisTemplate);
 

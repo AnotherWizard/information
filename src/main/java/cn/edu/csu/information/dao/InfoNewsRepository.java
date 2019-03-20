@@ -56,4 +56,13 @@ public interface InfoNewsRepository extends JpaRepository<InfoNews, Integer> {
     Page<InfoNews> findByUserId(Integer userId,Pageable pageable);
 
     List<InfoNews> findByIdIn(List<Integer> idList);
+
+    /**
+     * 根据关键词查询
+     * @param title
+     * @param content
+     * @param pageable
+     * @return
+     */
+    Page<InfoNews> findByTitleLikeOrContentLikeOrderByCreateTimeDesc(String title,String content,Pageable pageable);
 }

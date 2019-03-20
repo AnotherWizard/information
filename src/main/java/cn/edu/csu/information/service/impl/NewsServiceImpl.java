@@ -97,4 +97,11 @@ public class NewsServiceImpl implements NewsService {
 
         return infoNewsRepository.findByUserId(userId, pageable);
     }
+
+    @Override
+    public Page<InfoNews> findNewsByKeywords(String title, String content,Pageable pageable) {
+        title="%"+title+"%";
+        content="%"+content+"%";
+        return infoNewsRepository.findByTitleLikeOrContentLikeOrderByCreateTimeDesc(title,content,pageable);
+    }
 }

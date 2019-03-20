@@ -50,4 +50,6 @@ public interface NewsService {
 
     Page<InfoNews> findNewsByUserId(Integer userId,Pageable pageable);
 
+    Page<InfoNews> findNewsByKeywords(String title,String content,Pageable pageable);
+
 }
